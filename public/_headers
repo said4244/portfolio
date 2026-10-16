@@ -1,0 +1,15 @@
+# Cloudflare Pages / Netlify security headers.
+# Public site: strict CSP. /admin (Sveltia CMS) needs a looser one — see below.
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
+
+# The CMS is a single-page app loaded from a CDN that talks to the GitHub API.
+# This rule only affects /admin/* and overrides the CSP above for those paths.
+/admin/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; img-src 'self' data: blob: https://*.githubusercontent.com https://avatars.githubusercontent.com; font-src 'self' data: https://cdn.jsdelivr.net; connect-src 'self' https://api.github.com https://github.com https://*.githubusercontent.com https://unpkg.com https://cdn.jsdelivr.net; frame-src https://github.com; frame-ancestors 'none'; base-uri 'self'
