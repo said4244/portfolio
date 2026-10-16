@@ -10,7 +10,20 @@
       "bannerImage": "/media/projects/LLM-injection.png",
       "bannerWord": "llm·inj",
       "bannerGradient": "linear-gradient(135deg,#24181a,#3a2026 60%,#5a2a3a)",
-      "github": "https://github.com/OffSecSaid/llm-agent-prompt-injection-lab"
+      "github": "https://github.com/OffSecSaid/llm-agent-prompt-injection-lab",
+      "when_en": "research project"
+    },
+    {
+      "name": "portfolio",
+      "when": "live · deze site",
+      "blurb": "Deze site zelf: een tweetalige (NL/EN) security-portfolio en writeup-blog, gebouwd met Astro en een git-based CMS (Sveltia), gedeployd op Cloudflare Pages met eigen domein en strakke security-headers (CSP, HSTS).",
+      "blurb_en": "This very site: a bilingual (NL/EN) security portfolio and writeup blog, built with Astro and a git-based CMS (Sveltia), deployed on Cloudflare Pages with a custom domain and strict security headers (CSP, HSTS).",
+      "lang": "Astro",
+      "langColor": "#FF5D01",
+      "bannerImage": "/media/projects/portfolio-project.png",
+      "bannerGradient": "linear-gradient(135deg,#1b1e24,#2a2440 60%,#3a2f5a)",
+      "github": "https://github.com/OffSecSaid/portfolio",
+      "when_en": "live · this site"
     }
   ]
 }

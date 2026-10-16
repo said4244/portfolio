@@ -152,7 +152,8 @@ collections:
             label_singular: "Project"
             fields:
               - { name: name, label: "Naam", widget: string }
-              - { name: when, label: "Label (bv lab-tooling)", widget: string }
+              - { name: when, label: "Label (NL, bv lab-tooling)", widget: string }
+              - { name: when_en, label: "Label (EN)", widget: string, required: false }
               - { name: blurb, label: "Omschrijving (NL)", widget: text }
               - { name: blurb_en, label: "Omschrijving (EN)", widget: text, required: false }
               - { name: lang, label: "Taal", widget: string }

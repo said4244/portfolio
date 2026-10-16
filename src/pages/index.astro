@@ -191,7 +191,7 @@ const gh = 'M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
           <article class="proj">
             <div class="ph">
               <span class="nm"><svg viewBox="0 0 16 16"><path d={gh}></path></svg>{p.name}</span>
-              <span class="when">{p.when}</span>
+              <span class="when" data-en={p.when_en}>{p.when}</span>
             </div>
             <div class="proj-img" style={p.bannerImage ? undefined : `background:${p.bannerGradient}`}>
               {p.bannerImage && <img src={p.bannerImage} alt="" loading="lazy" />}
