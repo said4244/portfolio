@@ -151,9 +151,11 @@ img{max-width:100%}
 .tn-theme svg{width:17px;height:17px}
 .tn-theme:hover{color:var(--accent);background:var(--surface-2)}
 @media (max-width:640px){
-  .topnav-wrap{padding:0 10px;top:calc(env(safe-area-inset-top,0px) + 8px);justify-content:flex-start}
-  .topnav{overflow-x:auto;max-width:100%;scrollbar-width:none;-ms-overflow-style:none;justify-content:flex-start}
-  .topnav::-webkit-scrollbar{display:none}
+  .topnav-wrap{padding:0 10px;top:calc(env(safe-area-inset-top,0px) + 8px)}
+  /* Wrap to multiple rows so the NL/EN + theme toggles stay visible (no sideways scroll). */
+  .topnav{flex-wrap:wrap;justify-content:center;row-gap:4px;border-radius:18px;max-width:100%}
+  .topnav a{padding:6px 10px;font-size:13px}
+  .tn-divider{display:none}
 }
 
 /* ---------- SHARED SITE SHELL ---------- */
@@ -360,7 +362,8 @@ img{max-width:100%}
 .htb-stats .big span{font-size:13px;color:var(--muted);font-weight:500}
 .htb-stats .lab{font-family:var(--font-mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;
   color:var(--muted);margin-top:3px}
-.hs-sub{font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-top:5px;word-break:break-word}
+.hs-sub{font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-top:5px;
+  word-break:break-word;overflow-wrap:anywhere}
 .rank-ladder{display:flex;gap:4px;margin-top:18px}
 .rl-step{flex:1;min-width:0}
 .rl-bar{height:7px;border-radius:999px;background:var(--surface-2);border:var(--hair) solid var(--border)}
@@ -545,6 +548,18 @@ img{max-width:100%}
 .recent-h{font-family:var(--font-display);font-size:18px;font-weight:600;margin:28px 0 2px;
   padding-top:20px;border-top:var(--hair) solid var(--border)}
 @media (max-width:760px){.docs{grid-template-columns:1fr;gap:16px}.docs-side{display:none}}
+/* Mobile category filter: the sidebar is hidden on phones, so show a scrollable chip row. */
+.docs-filter-mobile{display:none}
+@media (max-width:760px){
+  .docs-filter-mobile{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;margin:2px 0 6px;
+    scrollbar-width:none;-ms-overflow-style:none}
+  .docs-filter-mobile::-webkit-scrollbar{display:none}
+  .docs-filter-mobile a{flex:none;white-space:nowrap;font-family:var(--font-mono);font-size:12px;
+    padding:7px 12px;border:var(--hair) solid var(--border);border-radius:999px;background:var(--surface);
+    color:var(--muted);text-decoration:none;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+  .docs-filter-mobile a span:last-child{opacity:.55}
+  .docs-filter-mobile a.active{color:var(--accent);border-color:var(--accent);background:var(--accent-weak)}
+}
 
 /* ---------- ARTICLE ---------- */
 .art-head{padding-block:clamp(28px,5vw,52px) 0}
@@ -638,6 +653,8 @@ img{max-width:100%}
   body{font-size:15px}
   .tl-item{grid-template-columns:1fr;gap:4px}
   .stats-band{grid-template-columns:1fr 1fr}
+  .htb-stats{grid-template-columns:1fr}
+  .htb-main{padding:18px 16px}
 }
 
 /* ===== Astro port additions ===== */

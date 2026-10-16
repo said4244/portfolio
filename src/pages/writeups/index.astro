@@ -44,10 +44,11 @@ const fmtDEn = (d: Date) => d.toLocaleDateString('en-GB', { day: 'numeric', mont
       <div class="docs-main">
         <h1 style="font-size:clamp(28px,4.5vw,42px);font-weight:700">Writeups</h1>
         <p class="art-sub" data-en="Everything I learn, explained step by step so you get it too. Pick a category or browse the recent notes.">Alles wat ik leer, stap voor stap uitgelegd zodat jij het ook snapt. Kies een categorie of blader door de recente notes.</p>
-        <div class="author-strip">
-          <span class="av">SA</span>
-          <span class="ai"><b>Said Alhazina</b><span data-en="eJPT · Network+ · HTB Skilled · on the way to OSCP">eJPT · Network+ · HTB Skilled · op weg naar OSCP</span></span>
-        </div>
+        <nav class="docs-filter-mobile" id="docsNavMobile" aria-label="Categorieën / categories">
+          {cats.map((c) => (
+            <a data-f={c.slug} class={c.slug === 'all' ? 'active' : ''}><span class="lbl" data-en={c.label_en}>{c.label}</span> <span>{c.n}</span></a>
+          ))}
+        </nav>
         <div class="active-filter" id="activeFilter">
           <span><span data-en="Filtered on">Gefilterd op</span> <b id="afLabel"></b></span>
           <span class="x" id="afClear" data-en="clear ✕">wis ✕</span>
@@ -81,16 +82,21 @@ const fmtDEn = (d: Date) => d.toLocaleDateString('en-GB', { day: 'numeric', mont
           var tags = (p.dataset.tags || '').split(' ');
           p.hidden = !(tag === 'all' || tags.indexOf(tag) > -1);
         });
-        document.querySelectorAll('#docsNav a').forEach(function (c) { c.classList.toggle('active', c.dataset.f === tag); });
+        document.querySelectorAll('#docsNav [data-f], #docsNavMobile [data-f]').forEach(function (c) { c.classList.toggle('active', c.dataset.f === tag); });
         if (afEl) {
           if (tag === 'all') { afEl.classList.remove('on'); }
           else { afLabel.textContent = label || tag; afEl.classList.add('on'); }
         }
       }
-      document.getElementById('docsNav').addEventListener('click', function (e) {
-        var el = e.target.closest('[data-f]'); if (!el) return; e.preventDefault();
-        applyFilter(el.dataset.f, labelOf(el));
-        history.replaceState(null, '', el.dataset.f === 'all' ? location.pathname : location.pathname + '?tag=' + el.dataset.f);
+      // One handler for both the sidebar (desktop) and the chip row (mobile).
+      ['docsNav', 'docsNavMobile'].forEach(function (id) {
+        var nav = document.getElementById(id);
+        if (!nav) return;
+        nav.addEventListener('click', function (e) {
+          var el = e.target.closest('[data-f]'); if (!el) return; e.preventDefault();
+          applyFilter(el.dataset.f, labelOf(el));
+          history.replaceState(null, '', el.dataset.f === 'all' ? location.pathname : location.pathname + '?tag=' + el.dataset.f);
+        });
       });
       var afClear = document.getElementById('afClear');
       if (afClear) afClear.addEventListener('click', function () { applyFilter('all'); history.replaceState(null, '', location.pathname); });
