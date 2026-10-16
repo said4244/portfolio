@@ -27,7 +27,6 @@ const diffLabel: Record<string, string> = { instap: 'Instap', medium: 'Medium', 
 const diffLabelEn: Record<string, string> = { instap: 'Entry', medium: 'Medium', hard: 'Hard', 'pro-lab': 'Pro Lab' };
 
 const h = home.htb;
-const rankNames = ['Beginner', 'Apprentice', 'Skilled', 'Professional', 'Master', 'Prodigy', 'Grandmaster'];
 const xpPct = Math.max(0, Math.min(100, (h.xpCurrent / h.xpMax) * 100)).toFixed(1);
 
 const gh = 'M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z';
@@ -60,28 +59,48 @@ const gh = 'M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
   <div class="wrap">
     <section class="sec" style="padding-top:0">
       <div class="htb-panel">
-        <div class="htb-main">
-          <div class="htb-rankrow">
-            <span class="htb-emblem">◆</span>
-            <div><div class="htb-lvl">{h.rank}</div><div class="htb-sub" data-en={`HTB rank ${h.rankIndex} of 7 · grade ${h.grade} · level ${h.level}`}>{`HTB-rang ${h.rankIndex} van 7 · grade ${h.grade} · level ${h.level}`}</div></div>
-            <a class="htb-live" href={h.profileUrl} target="_blank" rel="noopener"><span class="lp"></span><span data-en="live profile ↗">live profiel ↗</span></a>
+        <!-- HTB rank card (styled after the HTB profile card) -->
+        <div class="htb-card">
+          <div class="htb-emblem-lg" aria-hidden="true">
+            <svg viewBox="0 0 64 64">
+              <defs>
+                <linearGradient id="htbRank" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#D479FF" />
+                  <stop offset="1" stop-color="#6B2FB5" />
+                </linearGradient>
+              </defs>
+              <path d="M32 1 L61 23 L50 60 L14 60 L3 23 Z" fill="url(#htbRank)" opacity=".28" />
+              <path d="M32 7 L54 25 L32 55 L10 25 Z" fill="url(#htbRank)" />
+              <path d="M32 7 L54 25 L43 25 L32 16 L21 25 L10 25 Z" fill="#fff" opacity=".22" />
+              <path d="M32 20 L45 31 L32 48 L19 31 Z" fill="#160b28" opacity=".55" />
+              <path d="M32 26 L39 32 L32 41 L25 32 Z" fill="url(#htbRank)" />
+            </svg>
           </div>
-          <div class="rank-ladder">
-            {rankNames.map((_, i) => (
-              <div class={`rl-step ${i < h.rankIndex - 1 ? 'done' : i === h.rankIndex - 1 ? 'current' : ''}`}><div class="rl-bar"></div></div>
-            ))}
+          <div class="htb-card-body">
+            <div class="htb-toprow">
+              <div class="htb-lvl"><span class="lv">Lvl</span><span class="num">{h.level}</span></div>
+              <div class="htb-xp">
+                <div class="htb-xp-head">
+                  <span class="xp-label">Level <span class="xp-chip">XP</span></span>
+                  <span class="xp-vals">{`${h.xpCurrent}/${h.xpMax}`}</span>
+                </div>
+                <div class="htb-bar"><span style={`width:${xpPct}%`}></span></div>
+              </div>
+            </div>
+            <div class="htb-subrow">
+              <div class="htb-subcard"><div class="t">{h.rank}</div><div class="s" data-en="HTB Rank">HTB Rank</div></div>
+              <div class="htb-subcard grade"><div class="dots">◆◆◆</div><div class="s" data-en="Grade">{`Grade ${h.grade}`}</div></div>
+            </div>
           </div>
-          <div class="rank-names">
-            {rankNames.map((n, i) => <span class={i === h.rankIndex - 1 ? 'now' : ''}>{n}</span>)}
-          </div>
-          <div class="htb-bar" style="margin-top:20px"><span style={`width:${xpPct}%`}></span></div>
-          <div class="htb-barmeta"><span>{`Level ${h.level} → ${h.level + 1}`}</span><span>{`${h.xpCurrent} / ${h.xpMax} XP`}</span></div>
         </div>
-        <div class="htb-stats">
-          <div class="hs"><div class="big" id="htbMachines">{h.machines}</div><div class="lab" data-en="Machines fully pwned">Machines volledig gepwned</div><div class="hs-sub">user → root / NT AUTHORITY\SYSTEM</div></div>
-          <div class="hs"><div class="big">◆◆◆</div><div class="lab">{`Grade ${h.grade} · ${h.rank}`}</div></div>
+        <!-- Machines pwned, same height as the card -->
+        <div class="htb-machines">
+          <div class="big">{h.machines}</div>
+          <div class="lab" data-en="Machines fully pwned">Machines volledig gepwned</div>
+          <div class="hs-sub">user → root / NT AUTHORITY\SYSTEM</div>
         </div>
       </div>
+      <div class="htb-caption"><a class="htb-live" href={h.profileUrl} target="_blank" rel="noopener"><span class="lp"></span><span data-en="live profile ↗">live profiel ↗</span></a></div>
     </section>
   </div>
 
@@ -242,18 +261,4 @@ const gh = 'M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
     </section>
   </div>
 
-  <!-- Live HTB stats: updates the static numbers above from /api/htb when available. -->
-  <script is:inline>
-    (function () {
-      fetch('/api/htb').then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
-        if (!d || !d.ok) return;
-        // Only the machines count is mapped for now; rank/level/XP are added
-        // once the exact HTB API fields are confirmed.
-        if (d.systemOwns != null) {
-          var el = document.getElementById('htbMachines');
-          if (el) el.textContent = d.systemOwns;
-        }
-      }).catch(function () {});
-    })();
-  </script>
 </Base>
