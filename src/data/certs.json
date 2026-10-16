@@ -1,0 +1,69 @@
+{
+  "earned": [
+    {
+      "issuer": "eLearnSecurity · INE",
+      "badge": "INE",
+      "title": "eJPT: Junior Penetration Tester",
+      "date": "Uitgegeven 2 okt 2022",
+      "credential": "Certificaat-nr · 2723971",
+      "desc": "Hands-on examen: netwerk- en webenumeratie, exploitatie en pivoting in een realistische assessment-omgeving.",
+      "verifyUrl": "https://www.elearnsecurity.com/certification/verify/",
+      "image": "/media/certs/ejpt.png",
+      "cert": "/media/certs/ejpt.pdf",
+      "status": "Behaald"
+    },
+    {
+      "issuer": "CompTIA",
+      "badge": "C+",
+      "title": "CompTIA Network+",
+      "date": "Uitgegeven aug 2022",
+      "credential": "ID · COMP001022077663 · verify-code XE95TMS5JMF4149Q",
+      "desc": "Netwerkfundament: TCP/IP, subnetting, routing/switching, DNS/DHCP en basis netwerkbeveiliging.",
+      "verifyUrl": "https://verify.comptia.org",
+      "image": "/media/certs/network-plus.png",
+      "cert": "/media/certs/network-plus.pdf",
+      "status": "Behaald"
+    },
+    {
+      "issuer": "Hack The Box",
+      "badge": "HTB",
+      "title": "Pro Lab: Dante",
+      "date": "Uitgegeven 1 dec 2024",
+      "credential": "Credential ID · HTBCERT-6D3E0B41A4",
+      "desc": "Multi-host netwerk-pentest: enumeratie, exploitatie, privilege escalation en pivoting tussen subnets.",
+      "verifyUrl": "https://www.hackthebox.com/achievement/certification",
+      "image": "/media/certs/dante.png",
+      "cert": "/media/certs/dante.pdf",
+      "status": "Voltooid"
+    }
+  ],
+  "pursuing": [
+    {
+      "issuer": "Hack The Box",
+      "badge": "HTB",
+      "title": "CJCA: Junior Cybersecurity Associate",
+      "meta": "Verwacht nov 2026",
+      "desc": "Fundament in defensieve en offensieve basisvaardigheden; de opstap naar de CPTS-track.",
+      "badgeLabel": "In uitvoering",
+      "progress": 45
+    },
+    {
+      "issuer": "Hack The Box",
+      "badge": "HTB",
+      "title": "CPTS: Penetration Testing Specialist",
+      "meta": "De grote volgende stap",
+      "desc": "Volledige, hands-on pentest-certificering met een realistische rapportage-opdracht.",
+      "badgeLabel": "Gepland",
+      "progress": 0
+    },
+    {
+      "issuer": "OffSec",
+      "badge": "OS",
+      "title": "OSCP",
+      "meta": "Het einddoel",
+      "desc": "De industriestandaard voor offensive security, 24-uurs examen met volledige exploitatie-keten.",
+      "badgeLabel": "Doel",
+      "progress": 0
+    }
+  ]
+}

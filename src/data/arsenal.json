@@ -1,0 +1,79 @@
+{
+  "groups": [
+    {
+      "group": "Offensive Security",
+      "items": [
+        {
+          "label": "Nmap",
+          "tag": "nmap"
+        },
+        {
+          "label": "Metasploit",
+          "tag": "metasploit"
+        },
+        {
+          "label": "Enumeration",
+          "tag": "recon"
+        },
+        {
+          "label": "Privilege Escalation",
+          "tag": "privesc"
+        },
+        {
+          "label": "Pivoting",
+          "tag": "pivoting"
+        }
+      ]
+    },
+    {
+      "group": "Scripting",
+      "items": [
+        {
+          "label": "Python",
+          "tag": "python"
+        },
+        {
+          "label": "Bash",
+          "tag": "bash"
+        },
+        {
+          "label": "PowerShell",
+          "tag": "powershell"
+        },
+        {
+          "label": "SQL",
+          "tag": "sql"
+        }
+      ]
+    },
+    {
+      "group": "Networking",
+      "items": [
+        {
+          "label": "TCP/IP",
+          "tag": ""
+        },
+        {
+          "label": "DNS",
+          "tag": ""
+        },
+        {
+          "label": "NAT",
+          "tag": ""
+        },
+        {
+          "label": "VPN",
+          "tag": ""
+        },
+        {
+          "label": "Subnetting",
+          "tag": ""
+        },
+        {
+          "label": "Packet analysis",
+          "tag": ""
+        }
+      ]
+    }
+  ]
+}

@@ -5,16 +5,25 @@ import Base from '../../layouts/Base.astro';
 const posts = (await getCollection('writeups', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
+const slugify = (s: string) =>
+  s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+// Categories are built from the posts themselves: pick a category in the CMS
+// and it becomes a filter here automatically.
+const catMap = new Map<string, number>();
+for (const p of posts) for (const c of p.data.category) catMap.set(c, (catMap.get(c) || 0) + 1);
 const cats = [
-  { f: 'all', label: 'Alle writeups' },
-  { f: 'privesc', label: 'Privilege Escalation' },
-  { f: 'htb', label: 'HackTheBox' },
-  { f: 'ad', label: 'Active Directory' },
-  { f: 'web', label: 'Web' },
-  { f: 'ai', label: 'AI Security' },
-  { f: 'cert', label: 'Certificeringen' },
+  { slug: 'all', label: 'Alle writeups', n: posts.length },
+  ...[...catMap.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .map(([label, n]) => ({ slug: slugify(label), label, n })),
 ];
-const count = (f: string) => (f === 'all' ? posts.length : posts.filter((p) => p.data.tags.includes(f)).length);
+
+// A card matches on BOTH its category slugs and its tool tags, so the sidebar
+// (categories) and the arsenal links on the home page (tool tags) both work.
+const cardTags = (p: (typeof posts)[number]) =>
+  [...p.data.category.map(slugify), ...p.data.tags].join(' ');
+
 const diffClass: Record<string, string> = { instap: 'easy', medium: 'med', hard: 'hard', 'pro-lab': 'hard' };
 const diffLabel: Record<string, string> = { instap: 'Instap', medium: 'Medium', hard: 'Hard', 'pro-lab': 'Pro Lab' };
 const fmtD = (d: Date) => d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -26,7 +35,7 @@ const fmtD = (d: Date) => d.toLocaleDateString('nl-NL', { day: 'numeric', month:
         <div class="ds-head">Notes</div>
         <nav class="docs-nav" id="docsNav">
           {cats.map((c) => (
-            <a data-f={c.f} class={c.f === 'all' ? 'active' : ''}>{c.label} <span>{count(c.f)}</span></a>
+            <a data-f={c.slug} class={c.slug === 'all' ? 'active' : ''}>{c.label} <span>{c.n}</span></a>
           ))}
         </nav>
       </aside>
@@ -44,7 +53,7 @@ const fmtD = (d: Date) => d.toLocaleDateString('nl-NL', { day: 'numeric', month:
         <h2 class="recent-h" data-en="All writeups">Alle writeups</h2>
         <div class="post-list" id="postList">
           {posts.map((p) => (
-            <a class="post" href={`/writeups/${p.id}`} data-tags={p.data.tags.join(' ')}>
+            <a class="post" href={`/writeups/${p.id}`} data-tags={cardTags(p)}>
               <div class="pmeta">
                 {p.data.category.slice(0, 2).map((c) => <span class="tagc">{c}</span>)}
                 <span class={`diff ${diffClass[p.data.difficulty]}`}>{diffLabel[p.data.difficulty]}</span>

@@ -1,0 +1,34 @@
+{
+  "projects": [
+    {
+      "name": "enum-runner",
+      "when": "lab-tooling",
+      "blurb": "Mijn vaste enumeratie-workflow als één script: nmap-scans, service-detectie en nette output per host, zodat ik bij elke box dezelfde grondige start heb.",
+      "lang": "Bash",
+      "langColor": "#3f8f3f",
+      "bannerWord": "enum",
+      "bannerGradient": "linear-gradient(135deg,#1b1e24,#3a2420 68%,#7a2f26)",
+      "github": "https://github.com/saidalhazina"
+    },
+    {
+      "name": "mysql-udf-lab",
+      "when": "lab-setup",
+      "blurb": "Een veilige, herhaalbare lab-opstelling om MySQL UDF privilege escalation te oefenen, met notities over detectie en preventie voor de blue-team kant.",
+      "lang": "Python",
+      "langColor": "#3572A5",
+      "bannerWord": "udf·lab",
+      "bannerGradient": "linear-gradient(135deg,#24181a,#3a2026 60%,#5a2a3a)",
+      "github": "https://github.com/saidalhazina"
+    },
+    {
+      "name": "htb-notes",
+      "when": "doorlopend",
+      "blurb": "Mijn gestructureerde aantekeningen per HTB-machine: aanvalspaden, nuttige commando's en lessen. De ruwe basis waaruit mijn writeups ontstaan.",
+      "lang": "Markdown",
+      "langColor": "#89e051",
+      "bannerWord": "htb·notes",
+      "bannerGradient": "linear-gradient(135deg,#1c2420,#24302a 60%,#2f4034)",
+      "github": "https://github.com/saidalhazina"
+    }
+  ]
+}

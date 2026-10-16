@@ -1,12 +1,21 @@
 ---
-title: "MySQL UDF privilege escalation"
-description: "Van een MySQL-account met root-rechten naar command execution via lib_mysqludf_sys.dll, met een eerlijke uitleg van wat die DLL is en waarom MySQL hem uitvoert."
+title: MySQL UDF privilege escalation
+description: Van een MySQL-account met root-rechten naar command execution via lib_mysqludf_sys.dll, met een eerlijke uitleg van wat die DLL is en waarom MySQL hem uitvoert.
 date: 2026-10-12
-category: ["Privilege Escalation", "HackTheBox"]
-tags: ["privesc", "htb", "mysql", "sql", "windows", "powershell"]
-difficulty: "medium"
-readingTime: "14 min"
+category:
+  - Privilege Escalation
+  - HackTheBox
+tags:
+  - privesc
+  - htb
+  - mysql
+  - sql
+  - windows
+  - powershell
+difficulty: medium
+readingTime: 14 min
 pinned: true
+draft: false
 ---
 
 > **⚠ Lab & autorisatie.** Alles hieronder is uitgevoerd in een geïsoleerde oefenomgeving (HackTheBox-stijl) die ik mag aanvallen. Dezelfde technieken toepassen op systemen zonder uitdrukkelijke, schriftelijke toestemming is strafbaar. Ik schrijf dit bewust ook vanuit verdedigingsperspectief: de detectie- en preventiesectie onderaan is net zo belangrijk als de aanval zelf.
@@ -32,6 +41,7 @@ UDF staat voor **User-Defined Function**. MySQL komt met ingebouwde functies zoa
 Dat is een normale, bedoelde feature. Wil een bedrijf een hele snelle, custom berekening in de database? Dan schrijven ze die in C, compileren ze een library, zetten die in de plugin-map, en registreren ze de functie met `CREATE FUNCTION`. Vanaf dat moment roep je hem aan als elke andere SQL-functie.
 
 Het gat: MySQL dwingt niet af dat die library "veilige" dingen doet. Een UDF is gewone native code en mag alles wat het service-account mag, inclusief een programma starten. En er bestaat al een kant-en-klare library die precies dat als functie aanbiedt.
+![UDF-bestand, hoe openen of converteren? | FileDesc.com](/media/writeups/udf-400.png)
 
 ## 02 · Wat is lib_mysqludf_sys?
 
@@ -98,7 +108,7 @@ SELECT sys_eval('whoami');
 
 Die `whoami` is het hele spel. Komt daar `nt authority\system` uit, dan voer ik dus commando's uit als de meest geprivilegieerde account op de machine, puur omdat de databaseservice daaronder draaide. Vanaf hier is het "gewoon" nog een betrouwbare shell opzetten.
 
-> **◆ De laatste stap, bewust kort.** Met `sys_eval()` als command-primitive is de volgende logische stap een stabiele reverse shell terug naar mijn listener. De concrete payload hangt af van wat op de target beschikbaar is (PowerShell, een neergezette binary, een download-cradle). Ik laat de kant-en-klare payload hier weg; het punt van deze writeup is *waaróm* de privesc werkt, niet het leveren van een copy-paste wapen.
+> **◆ De laatste stap, bewust kort.** Met `sys_eval()` als command-primitive is de volgende logische stap een stabiele reverse shell terug naar mijn listener. De concrete payload hangt af van wat op de target beschikbaar is (PowerShell, een neergezette binary, een download-cradle). Ik laat de kant-en-klare payload hier weg; het punt van deze writeup is _waaróm_ de privesc werkt, niet het leveren van een copy-paste wapen.
 
 ## 06 · Blue team: detectie & preventie
 

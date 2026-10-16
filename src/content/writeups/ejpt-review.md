@@ -6,6 +6,7 @@ category: ["Certificering"]
 tags: ["cert", "nmap", "metasploit", "recon"]
 difficulty: "instap"
 readingTime: "8 min"
+draft: false
 ---
 
 De eJPT is een mooie eerste hands-on certificering. Geen multiplechoice-trivia, maar een echte omgeving waarin je moet enumereren, exploiteren en pivoten.

@@ -1,0 +1,38 @@
+{
+  "name": "Said Alhazina",
+  "role_nl": "Passionate ethical hacker",
+  "role_en": "Passionate ethical hacker",
+  "lead_nl": "Ik hou ervan systemen zó diep te begrijpen dat ik ze dingen kan laten doen die ze eigenlijk niet horen te doen, netjes binnen de grenzen van een lab of een geautoriseerde opdracht. Daarna leg ik stap voor stap uit hoe het werkt. Elke box, CTF en techniek die ik leer wordt hier een writeup, geschreven voor iemand die de term nog nooit heeft gehoord.",
+  "lead_en": "I love understanding systems so deeply that I can make them do things they aren't supposed to, always within the bounds of a lab or an authorized engagement. Then I explain, step by step, exactly how it works. Every box, CTF and technique I learn becomes a writeup here, written for someone who has never heard the term.",
+  "heroImage": "/media/hero.jpg",
+  "ctaPrimary_nl": "Lees de writeups",
+  "ctaPrimary_en": "Read the writeups",
+  "ctaContact_nl": "Neem contact op",
+  "ctaContact_en": "Get in touch",
+  "htb": {
+    "rank": "Skilled",
+    "rankIndex": 3,
+    "grade": "III",
+    "level": 42,
+    "xpCurrent": 538,
+    "xpMax": 1024,
+    "machines": 20,
+    "profileUrl": "https://app.hackthebox.com/users"
+  },
+  "aboutHeading_nl": "Over mij",
+  "aboutHeading_en": "About me",
+  "aboutImage": "/media/about.jpg",
+  "about_nl": [
+    "Ik ben Said, een cybersecurity-student met één duidelijke drijfveer: offensive security. Ik raak gefascineerd door hoe systemen in elkaar zitten en hoe je ze, door ze echt te begrijpen, dingen kunt laten doen die ze eigenlijk niet horen te doen. Die passie pak ik volledig hands-on aan: certificeringen, HackTheBox, CTF's en labs, consistent en elke week opnieuw.",
+    "Alles wat ik leer leg ik hier vast in writeups, en dat is net zo goed voor mezelf. De beste manier om een onderwerp écht te snappen is het uitleggen aan iemand anders. Dus leg ik alles uit alsof je het voor het eerst leest, stap voor stap, zonder voorkennis te veronderstellen. Zo laat ik meteen zien dat ik de stof echt beheers en niet alleen tools naklik."
+  ],
+  "about_en": [
+    "I'm Said, a cybersecurity student with one clear driver: offensive security. I'm fascinated by how systems fit together and how, by truly understanding them, you can make them do things they aren't supposed to. I pursue that passion entirely hands-on: certifications, Hack The Box, CTFs and labs, consistently, week after week.",
+    "Everything I learn I write up here, and that's just as much for myself. The best way to really grasp a topic is to explain it to someone else. So I explain everything as if you're reading it for the first time, step by step, assuming no prior knowledge. That's also how I show I actually master the material, instead of just clicking tools."
+  ],
+  "contact": {
+    "email": "said444b@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/said-alhazina-2b94013b7",
+    "github": "https://github.com/saidalhazina"
+  }
+}

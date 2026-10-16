@@ -6,6 +6,7 @@ category: ["AI Security", "Web"]
 tags: ["ai", "web", "sql", "python"]
 difficulty: "hard"
 readingTime: "11 min"
+draft: false
 ---
 
 Dit is de brug tussen mijn twee werelden. Een LLM-agent die tools mag aanroepen en een database mag bevragen is handig, maar het maakt 'm ook gevaarlijk.

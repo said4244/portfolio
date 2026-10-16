@@ -60,3 +60,110 @@ collections:
       - { name: pinned, label: "Vastgepind (uitlichten)", widget: boolean, default: false }
       - { name: draft, label: "Concept (nog niet publiceren)", widget: boolean, default: true }
       - { name: body, label: "Inhoud", widget: markdown }
+
+  - name: site
+    label: "Site-inhoud"
+    files:
+      - name: home
+        label: "Home & Over mij"
+        file: "src/data/home.json"
+        fields:
+          - { name: name, label: "Naam", widget: string }
+          - { name: role_nl, label: "Rol onder je naam (NL)", widget: string }
+          - { name: role_en, label: "Rol onder je naam (EN)", widget: string }
+          - { name: lead_nl, label: "Hero-tekst (NL)", widget: text }
+          - { name: lead_en, label: "Hero-tekst (EN)", widget: text }
+          - { name: heroImage, label: "Hero-foto", widget: image }
+          - { name: ctaPrimary_nl, label: "Knop writeups (NL)", widget: string }
+          - { name: ctaPrimary_en, label: "Knop writeups (EN)", widget: string }
+          - { name: ctaContact_nl, label: "Knop contact (NL)", widget: string }
+          - { name: ctaContact_en, label: "Knop contact (EN)", widget: string }
+          - name: htb
+            label: "Hack The Box stats"
+            widget: object
+            fields:
+              - { name: rank, label: "Rang (naam)", widget: string }
+              - { name: rankIndex, label: "Rang-nummer (1 t/m 7)", widget: number, value_type: int, min: 1, max: 7 }
+              - { name: grade, label: "Grade (bv III)", widget: string }
+              - { name: level, label: "Level", widget: number, value_type: int }
+              - { name: xpCurrent, label: "XP huidig", widget: number, value_type: int }
+              - { name: xpMax, label: "XP naar volgend level", widget: number, value_type: int }
+              - { name: machines, label: "Machines gepwned", widget: number, value_type: int }
+              - { name: profileUrl, label: "HTB profiel-URL", widget: string }
+          - { name: aboutHeading_nl, label: "Over mij titel (NL)", widget: string }
+          - { name: aboutHeading_en, label: "Over mij titel (EN)", widget: string }
+          - { name: aboutImage, label: "Over mij foto", widget: image }
+          - { name: about_nl, label: "Over mij alinea's (NL)", widget: list, field: { name: p, label: "Alinea", widget: text } }
+          - { name: about_en, label: "Over mij alinea's (EN)", widget: list, field: { name: p, label: "Paragraph", widget: text } }
+          - name: contact
+            label: "Contact"
+            widget: object
+            fields:
+              - { name: email, label: "E-mail", widget: string }
+              - { name: linkedin, label: "LinkedIn-URL", widget: string }
+              - { name: github, label: "GitHub-URL", widget: string }
+      - name: certs
+        label: "Certificeringen"
+        file: "src/data/certs.json"
+        fields:
+          - name: earned
+            label: "Behaald"
+            widget: list
+            label_singular: "Certificaat"
+            fields:
+              - { name: title, label: "Titel", widget: string }
+              - { name: issuer, label: "Uitgever", widget: string }
+              - { name: badge, label: "Badge-tekst (bv INE)", widget: string }
+              - { name: date, label: "Datum-regel", widget: string }
+              - { name: credential, label: "Credential-ID regel", widget: string }
+              - { name: desc, label: "Omschrijving", widget: text }
+              - { name: verifyUrl, label: "Verify-URL", widget: string }
+              - { name: image, label: "Certificaat-afbeelding", widget: image }
+              - { name: cert, label: "Certificaat-PDF", widget: file }
+              - { name: status, label: "Status (Behaald/Voltooid)", widget: string, default: "Behaald" }
+          - name: pursuing
+            label: "Bezig & volgende"
+            widget: list
+            label_singular: "Doel"
+            fields:
+              - { name: title, label: "Titel", widget: string }
+              - { name: issuer, label: "Uitgever", widget: string }
+              - { name: badge, label: "Badge-tekst", widget: string }
+              - { name: meta, label: "Sub-tekst", widget: string }
+              - { name: desc, label: "Omschrijving", widget: text }
+              - { name: badgeLabel, label: "Status-label (In uitvoering/Gepland/Doel)", widget: string }
+              - { name: progress, label: "Voortgang % (0 = geen balk)", widget: number, value_type: int, default: 0 }
+      - name: projects
+        label: "Projecten"
+        file: "src/data/projects.json"
+        fields:
+          - name: projects
+            label: "Projecten"
+            widget: list
+            label_singular: "Project"
+            fields:
+              - { name: name, label: "Naam", widget: string }
+              - { name: when, label: "Label (bv lab-tooling)", widget: string }
+              - { name: blurb, label: "Omschrijving", widget: text }
+              - { name: lang, label: "Taal", widget: string }
+              - { name: langColor, label: "Taal-kleur (hex)", widget: string, default: "#3f8f3f" }
+              - { name: bannerWord, label: "Banner-woord", widget: string }
+              - { name: bannerGradient, label: "Banner-gradient (CSS)", widget: string }
+              - { name: github, label: "GitHub-URL", widget: string }
+      - name: arsenal
+        label: "Arsenal"
+        file: "src/data/arsenal.json"
+        fields:
+          - name: groups
+            label: "Groepen"
+            widget: list
+            label_singular: "Groep"
+            fields:
+              - { name: group, label: "Groepsnaam", widget: string }
+              - name: items
+                label: "Tools"
+                widget: list
+                label_singular: "Tool"
+                fields:
+                  - { name: label, label: "Weergavenaam", widget: string }
+                  - { name: tag, label: "Tag (leeg = niet klikbaar)", widget: string, required: false }

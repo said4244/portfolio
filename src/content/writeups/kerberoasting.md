@@ -6,6 +6,7 @@ category: ["Active Directory"]
 tags: ["ad", "credentials", "windows"]
 difficulty: "medium"
 readingTime: "13 min"
+draft: false
 ---
 
 Kerberoasting klinkt eng, maar het idee is simpel zodra je begrijpt wat een service-account en een ticket zijn. Dat bouwen we hier rustig op.

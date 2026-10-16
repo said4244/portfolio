@@ -7,6 +7,7 @@ tags: ["htb", "pivoting", "nmap", "metasploit", "recon", "privesc"]
 difficulty: "pro-lab"
 readingTime: "18 min"
 pinned: true
+draft: false
 ---
 
 Dante is een multi-host netwerk waar je begint met één machine aan de rand en langzaam naar binnen werkt. Het leuke (en leerzame) is dat je al snel netwerken tegenkomt die je niet direct kunt bereiken. Pivoting wordt dan geen trucje, maar noodzaak.

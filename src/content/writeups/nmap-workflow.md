@@ -6,6 +6,7 @@ category: ["Web"]
 tags: ["web", "recon", "nmap", "bash"]
 difficulty: "instap"
 readingTime: "9 min"
+draft: false
 ---
 
 De meeste machines vallen niet op een of andere spannende exploit, maar op iets wat je had kunnen vinden met betere enumeratie. Daarom begin ik altijd hetzelfde.
