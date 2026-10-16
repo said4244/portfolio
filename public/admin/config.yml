@@ -1,0 +1,62 @@
+# Sveltia CMS configuration.
+# LOKAAL bewerken (nu): local_backend staat aan -> open /admin via de dev-server
+# in Chrome, klik "Work with Local Repository", kies deze projectmap. Geen login nodig.
+# PRODUCTIE (later): vul hieronder je GitHub repo in; dan logt de CMS in via GitHub.
+
+backend:
+  name: github
+  repo: saidalhazina/portfolio   # <-- pas aan naar jouw GitHub gebruiker/repo
+  branch: main
+
+# Zet lokaal bewerken aan (werkt met de dev-server, geen GitHub nodig):
+local_backend: true
+
+media_folder: "public/media/writeups"
+public_folder: "/media/writeups"
+
+collections:
+  - name: writeups
+    label: "Writeups"
+    label_singular: "Writeup"
+    folder: "src/content/writeups"
+    create: true
+    delete: true
+    extension: "md"
+    format: "yaml-frontmatter"
+    slug: "{{slug}}"
+    summary: "{{title}}  ·  {{date | date('D MMM YYYY')}}"
+    sortable_fields: ["date", "title"]
+    fields:
+      - { name: title, label: "Titel", widget: string }
+      - { name: description, label: "Korte omschrijving (subtitel)", widget: text }
+      - { name: date, label: "Datum", widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, picker_utc: true }
+      - name: category
+        label: "Categorie (voor de zijbalk-filters)"
+        widget: select
+        multiple: true
+        min: 1
+        options:
+          - { label: "Privilege Escalation", value: "Privilege Escalation" }
+          - { label: "HackTheBox", value: "HackTheBox" }
+          - { label: "Active Directory", value: "Active Directory" }
+          - { label: "Web", value: "Web" }
+          - { label: "AI Security", value: "AI Security" }
+          - { label: "Certificering", value: "Certificering" }
+      - name: tags
+        label: "Tags (tools/onderwerpen, koppelen aan je Arsenal)"
+        widget: list
+        allow_add: true
+        field: { name: tag, label: "Tag", widget: string }
+      - name: difficulty
+        label: "Moeilijkheid"
+        widget: select
+        default: "medium"
+        options:
+          - { label: "Instap", value: "instap" }
+          - { label: "Medium", value: "medium" }
+          - { label: "Hard", value: "hard" }
+          - { label: "Pro Lab", value: "pro-lab" }
+      - { name: readingTime, label: "Leestijd", widget: string, default: "10 min", hint: "bijv. 14 min" }
+      - { name: pinned, label: "Vastgepind (uitlichten)", widget: boolean, default: false }
+      - { name: draft, label: "Concept (nog niet publiceren)", widget: boolean, default: true }
+      - { name: body, label: "Inhoud", widget: markdown }

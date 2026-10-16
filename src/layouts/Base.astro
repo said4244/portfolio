@@ -1,0 +1,84 @@
+---
+import '../styles/global.css';
+export interface Props { title: string; description?: string; }
+const { title, description = 'Offensive-security writeups en portfolio van Said Alhazina.' } = Astro.props;
+const path = Astro.url.pathname;
+const isHome = path === '/';
+const isWriteups = path.startsWith('/writeups');
+---
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" />
+</head>
+<body>
+  <header class="topnav-wrap">
+    <nav class="topnav">
+      <a href="/" class={isHome ? 'active' : ''} data-en="Home">Home</a>
+      <a href="/#certifications" data-en="Certifications">Certificeringen</a>
+      <a href="/#projects" data-en="Projects">Projecten</a>
+      <a href="/#about" data-en="About">Over mij</a>
+      <a href="/writeups" class={isWriteups ? 'active' : ''} data-en="Writeups">Writeups</a>
+      <span class="tn-divider"></span>
+      <div class="tn-lang" id="langToggle" role="group" aria-label="Taal / language">
+        <button type="button" data-lang="nl" class="active">NL</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+      <button class="tn-theme" id="themeBtn" title="Licht / donker" aria-label="Thema wisselen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <slot />
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© 2026 Said Alhazina · Offensive Security &amp; writeups</span>
+      <span>said444b@gmail.com · <a href="https://www.linkedin.com/in/said-alhazina-2b94013b7" target="_blank" rel="noopener">LinkedIn</a> · Hack The Box</span>
+    </div>
+  </footer>
+
+  <script is:inline>
+    (function () {
+      var root = document.documentElement;
+      var tb = document.getElementById('themeBtn');
+      if (tb) tb.addEventListener('click', function () {
+        var cur = root.getAttribute('data-theme');
+        var sysDark = window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches;
+        var isDark = cur ? cur === 'dark' : sysDark;
+        root.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        try { localStorage.setItem('pf_theme', root.getAttribute('data-theme')); } catch (e) {}
+      });
+      function setLang(lang) {
+        document.querySelectorAll('[data-en]').forEach(function (el) {
+          if (el.getAttribute('data-nl') === null) el.setAttribute('data-nl', el.textContent);
+          el.textContent = (lang === 'en') ? el.getAttribute('data-en') : el.getAttribute('data-nl');
+        });
+        var lt = document.getElementById('langToggle');
+        if (lt) lt.querySelectorAll('button').forEach(function (b) { b.classList.toggle('active', b.dataset.lang === lang); });
+        root.setAttribute('lang', lang);
+        try { localStorage.setItem('pf_lang', lang); } catch (e) {}
+      }
+      var lt = document.getElementById('langToggle');
+      if (lt) lt.addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) setLang(b.dataset.lang); });
+      document.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-copy]'); if (!b) return; e.preventDefault();
+        var t = b.getAttribute('data-copy'), old = b.textContent;
+        function done() { b.textContent = 'gekopieerd ✓'; setTimeout(function () { b.textContent = old; }, 1400); }
+        if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(t).then(done).catch(done); } else { done(); }
+      });
+      try { var th = localStorage.getItem('pf_theme'); if (th) root.setAttribute('data-theme', th); } catch (e) {}
+      try { var lg = localStorage.getItem('pf_lang'); if (lg === 'en') setLang('en'); } catch (e) {}
+    })();
+  </script>
+</body>
+</html>

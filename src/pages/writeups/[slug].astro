@@ -1,0 +1,39 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('writeups', ({ data }) => !data.draft);
+  return posts.map((p) => ({ params: { slug: p.id }, props: { post: p } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const d = post.data;
+const diffClass: Record<string, string> = { instap: 'easy', medium: 'med', hard: 'hard', 'pro-lab': 'hard' };
+const diffLabel: Record<string, string> = { instap: 'Instap', medium: 'Medium', hard: 'Hard', 'pro-lab': 'Pro Lab' };
+const fmt = d.date.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' });
+---
+<Base title={d.title} description={d.description}>
+  <div class="read">
+    <div class="art-head">
+      <a class="backlink" href="/writeups">← Terug naar writeups</a>
+      <div class="art-tags">
+        {d.category.map((c) => <span class="tagc">{c}</span>)}
+        <span class={`diff ${diffClass[d.difficulty]}`}>{diffLabel[d.difficulty]}</span>
+      </div>
+      <h1>{d.title}</h1>
+      <p class="art-sub">{d.description}</p>
+      <div class="art-meta">
+        <span>{fmt}</span>
+        <span><b>{d.readingTime}</b> lezen</span>
+        <span>Door <b>Said Alhazina</b></span>
+      </div>
+    </div>
+    <div class="art-body">
+      <Content />
+    </div>
+    <hr class="rule" style="margin:30px 0" />
+    <p style="font-family:var(--font-mono);font-size:13px;color:var(--muted)">Vragen of een fout gevonden? Mail <b style="color:var(--fg)">said444b@gmail.com</b>, correcties maken de volgende writeup beter.</p>
+  </div>
+</Base>
