@@ -13,10 +13,10 @@ const slugify = (s: string) =>
 const catMap = new Map<string, number>();
 for (const p of posts) for (const c of p.data.category) catMap.set(c, (catMap.get(c) || 0) + 1);
 const cats = [
-  { slug: 'all', label: 'Alle writeups', n: posts.length },
+  { slug: 'all', label: 'Alle writeups', label_en: 'All writeups', n: posts.length },
   ...[...catMap.entries()]
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-    .map(([label, n]) => ({ slug: slugify(label), label, n })),
+    .map(([label, n]) => ({ slug: slugify(label), label, label_en: label, n })),
 ];
 
 // A card matches on BOTH its category slugs and its tool tags, so the sidebar
@@ -26,7 +26,9 @@ const cardTags = (p: (typeof posts)[number]) =>
 
 const diffClass: Record<string, string> = { instap: 'easy', medium: 'med', hard: 'hard', 'pro-lab': 'hard' };
 const diffLabel: Record<string, string> = { instap: 'Instap', medium: 'Medium', hard: 'Hard', 'pro-lab': 'Pro Lab' };
+const diffLabelEn: Record<string, string> = { instap: 'Entry', medium: 'Medium', hard: 'Hard', 'pro-lab': 'Pro Lab' };
 const fmtD = (d: Date) => d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' });
+const fmtDEn = (d: Date) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 ---
 <Base title="Writeups" description="Offensive-security writeups, stap voor stap uitgelegd.">
   <div class="wrap">
@@ -35,7 +37,7 @@ const fmtD = (d: Date) => d.toLocaleDateString('nl-NL', { day: 'numeric', month:
         <div class="ds-head">Notes</div>
         <nav class="docs-nav" id="docsNav">
           {cats.map((c) => (
-            <a data-f={c.slug} class={c.slug === 'all' ? 'active' : ''}>{c.label} <span>{c.n}</span></a>
+            <a data-f={c.slug} class={c.slug === 'all' ? 'active' : ''}><span class="lbl" data-en={c.label_en}>{c.label}</span> <span>{c.n}</span></a>
           ))}
         </nav>
       </aside>
@@ -44,11 +46,11 @@ const fmtD = (d: Date) => d.toLocaleDateString('nl-NL', { day: 'numeric', month:
         <p class="art-sub" data-en="Everything I learn, explained step by step so you get it too. Pick a category or browse the recent notes.">Alles wat ik leer, stap voor stap uitgelegd zodat jij het ook snapt. Kies een categorie of blader door de recente notes.</p>
         <div class="author-strip">
           <span class="av">SA</span>
-          <span class="ai"><b>Said Alhazina</b><span>eJPT · Network+ · HTB Skilled · op weg naar OSCP</span></span>
+          <span class="ai"><b>Said Alhazina</b><span data-en="eJPT · Network+ · HTB Skilled · on the way to OSCP">eJPT · Network+ · HTB Skilled · op weg naar OSCP</span></span>
         </div>
         <div class="active-filter" id="activeFilter">
-          <span>Gefilterd op <b id="afLabel"></b></span>
-          <span class="x" id="afClear">wis ✕</span>
+          <span><span data-en="Filtered on">Gefilterd op</span> <b id="afLabel"></b></span>
+          <span class="x" id="afClear" data-en="clear ✕">wis ✕</span>
         </div>
         <h2 class="recent-h" data-en="All writeups">Alle writeups</h2>
         <div class="post-list" id="postList">
@@ -56,13 +58,13 @@ const fmtD = (d: Date) => d.toLocaleDateString('nl-NL', { day: 'numeric', month:
             <a class="post" href={`/writeups/${p.id}`} data-tags={cardTags(p)}>
               <div class="pmeta">
                 {p.data.category.slice(0, 2).map((c) => <span class="tagc">{c}</span>)}
-                <span class={`diff ${diffClass[p.data.difficulty]}`}>{diffLabel[p.data.difficulty]}</span>
+                <span class={`diff ${diffClass[p.data.difficulty]}`} data-en={diffLabelEn[p.data.difficulty]}>{diffLabel[p.data.difficulty]}</span>
                 <span>{p.data.readingTime}</span>
-                <span>· {fmtD(p.data.date)}</span>
+                <span data-en={`· ${fmtDEn(p.data.date)}`}>· {fmtD(p.data.date)}</span>
               </div>
-              <h3>{p.data.title}</h3>
-              <p>{p.data.description}</p>
-              <span class="more">Lees writeup</span>
+              <h3 data-en={p.data.title_en}>{p.data.title}</h3>
+              <p data-en={p.data.description_en}>{p.data.description}</p>
+              <span class="more" data-en="Read writeup">Lees writeup</span>
             </a>
           ))}
         </div>

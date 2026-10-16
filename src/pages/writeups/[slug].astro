@@ -12,28 +12,30 @@ const { Content } = await render(post);
 const d = post.data;
 const diffClass: Record<string, string> = { instap: 'easy', medium: 'med', hard: 'hard', 'pro-lab': 'hard' };
 const diffLabel: Record<string, string> = { instap: 'Instap', medium: 'Medium', hard: 'Hard', 'pro-lab': 'Pro Lab' };
+const diffLabelEn: Record<string, string> = { instap: 'Entry', medium: 'Medium', hard: 'Hard', 'pro-lab': 'Pro Lab' };
 const fmt = d.date.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' });
+const fmtEn = d.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 ---
 <Base title={d.title} description={d.description}>
   <div class="read">
     <div class="art-head">
-      <a class="backlink" href="/writeups">← Terug naar writeups</a>
+      <a class="backlink" href="/writeups" data-en="← Back to writeups">← Terug naar writeups</a>
       <div class="art-tags">
         {d.category.map((c) => <span class="tagc">{c}</span>)}
-        <span class={`diff ${diffClass[d.difficulty]}`}>{diffLabel[d.difficulty]}</span>
+        <span class={`diff ${diffClass[d.difficulty]}`} data-en={diffLabelEn[d.difficulty]}>{diffLabel[d.difficulty]}</span>
       </div>
-      <h1>{d.title}</h1>
-      <p class="art-sub">{d.description}</p>
+      <h1 data-en={d.title_en}>{d.title}</h1>
+      <p class="art-sub" data-en={d.description_en}>{d.description}</p>
       <div class="art-meta">
-        <span>{fmt}</span>
-        <span><b>{d.readingTime}</b> lezen</span>
-        <span>Door <b>Said Alhazina</b></span>
+        <span data-en={fmtEn}>{fmt}</span>
+        <span><b>{d.readingTime}</b> <span data-en="read">lezen</span></span>
+        <span><span data-en="By">Door</span> <b>Said Alhazina</b></span>
       </div>
     </div>
     <div class="art-body">
       <Content />
     </div>
     <hr class="rule" style="margin:30px 0" />
-    <p style="font-family:var(--font-mono);font-size:13px;color:var(--muted)">Vragen of een fout gevonden? Mail <b style="color:var(--fg)">said444b@gmail.com</b>, correcties maken de volgende writeup beter.</p>
+    <p style="font-family:var(--font-mono);font-size:13px;color:var(--muted)"><span data-en="Questions or found a mistake? Email">Vragen of een fout gevonden? Mail</span> <b style="color:var(--fg)">said444b@gmail.com</b><span data-en=", corrections make the next writeup better.">, correcties maken de volgende writeup beter.</span></p>
   </div>
 </Base>

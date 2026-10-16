@@ -5,6 +5,12 @@ import home from '../data/home.json';
 import certs from '../data/certs.json';
 import projects from '../data/projects.json';
 import arsenal from '../data/arsenal.json';
+// Issuer logos, recoloured to currentColor so they adapt to light/dark.
+import comptiaLogo from '../../public/media/certs/logos/comptia.svg?raw';
+import htbLogo from '../../public/media/certs/logos/hackthebox.svg?raw';
+import offsecLogo from '../../public/media/certs/logos/offsec.svg?raw';
+import ineLogo from '../../public/media/certs/logos/ine.svg?raw';
+const issuerLogos: Record<string, string> = { comptia: comptiaLogo, hackthebox: htbLogo, offsec: offsecLogo, ine: ineLogo };
 
 const posts = (await getCollection('writeups', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -18,6 +24,7 @@ const tagCount = (tag: string) => (tag ? posts.filter((p) => p.data.tags.include
 
 const diffClass: Record<string, string> = { instap: 'easy', medium: 'med', hard: 'hard', 'pro-lab': 'hard' };
 const diffLabel: Record<string, string> = { instap: 'Instap', medium: 'Medium', hard: 'Hard', 'pro-lab': 'Pro Lab' };
+const diffLabelEn: Record<string, string> = { instap: 'Entry', medium: 'Medium', hard: 'Hard', 'pro-lab': 'Pro Lab' };
 
 const h = home.htb;
 const rankNames = ['Beginner', 'Apprentice', 'Skilled', 'Professional', 'Master', 'Prodigy', 'Grandmaster'];
@@ -57,7 +64,7 @@ const gh = 'M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
           <div class="htb-rankrow">
             <span class="htb-emblem">◆</span>
             <div><div class="htb-lvl">{h.rank}</div><div class="htb-sub" data-en={`HTB rank ${h.rankIndex} of 7 · grade ${h.grade} · level ${h.level}`}>{`HTB-rang ${h.rankIndex} van 7 · grade ${h.grade} · level ${h.level}`}</div></div>
-            <a class="htb-live" href={h.profileUrl} target="_blank" rel="noopener"><span class="lp"></span>live profiel ↗</a>
+            <a class="htb-live" href={h.profileUrl} target="_blank" rel="noopener"><span class="lp"></span><span data-en="live profile ↗">live profiel ↗</span></a>
           </div>
           <div class="rank-ladder">
             {rankNames.map((_, i) => (
@@ -89,16 +96,16 @@ const gh = 'M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
       <div class="cert-grid" style="margin-bottom:30px">
         {certs.earned.map((c) => (
           <div class="certcard">
-            <div class="certimg"><img src={c.image} alt={`${c.title} certificaat`} /><span class="cert-ov">{c.status}</span></div>
-            <div class="top"><span class="issuer"><span class="ib">{c.badge}</span>{c.issuer}</span></div>
+            <div class="certimg"><img src={c.image} alt={`${c.title} certificaat`} /><span class="cert-ov" data-en={c.status_en}>{c.status}</span></div>
+            <div class="top"><span class="issuer"><span class={`ilogo ilogo-${c.logo}`} set:html={issuerLogos[c.logo]} />{c.issuer}</span></div>
             <div class="body">
               <h4>{c.title}</h4>
-              <div class="cmeta"><span>{c.date}</span></div>
-              <p class="desc">{c.desc}</p>
-              <div class="cid">{c.credential}</div>
+              <div class="cmeta"><span data-en={c.date_en}>{c.date}</span></div>
+              <p class="desc" data-en={c.desc_en}>{c.desc}</p>
+              <div class="cid" data-en={c.credential_en}>{c.credential}</div>
               <div class="acts">
-                <a class="verify" href={c.verifyUrl} target="_blank" rel="noopener">Verifieer ↗</a>
-                <a class="cdetails" href={c.cert} target="_blank" rel="noopener">Certificaat ↗</a>
+                <a class="verify" href={c.verifyUrl} target="_blank" rel="noopener" data-en="Verify ↗">Verifieer ↗</a>
+                <a class="cdetails" href={c.cert} target="_blank" rel="noopener" data-en="Certificate ↗">Certificaat ↗</a>
               </div>
             </div>
           </div>
@@ -109,15 +116,15 @@ const gh = 'M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
       <div class="cert-grid">
         {certs.pursuing.map((c) => (
           <div class="certcard">
-            <div class="top"><span class="issuer"><span class="ib">{c.badge}</span>{c.issuer}</span><span class="badge-prog">{c.badgeLabel}</span></div>
+            <div class="top"><span class="issuer"><span class={`ilogo ilogo-${c.logo}`} set:html={issuerLogos[c.logo]} />{c.issuer}</span><span class="badge-prog" data-en={c.badgeLabel_en}>{c.badgeLabel}</span></div>
             <div class="body">
               <h4>{c.title}</h4>
-              <div class="cmeta"><span>{c.meta}</span></div>
-              <p class="desc">{c.desc}</p>
+              <div class="cmeta"><span data-en={c.meta_en}>{c.meta}</span></div>
+              <p class="desc" data-en={c.desc_en}>{c.desc}</p>
               {c.progress > 0 && (
                 <>
                   <div class="cert-prog"><span style={`width:${c.progress}%`}></span></div>
-                  <div class="cert-prog-lab">{`~${c.progress}% · studerend`}</div>
+                  <div class="cert-prog-lab" data-en={`~${c.progress}% · studying`}>{`~${c.progress}% · studerend`}</div>
                 </>
               )}
             </div>
@@ -134,7 +141,7 @@ const gh = 'M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
     <section class="sec">
       <div class="sec-head">
         <div id="arsenal"><h2>Arsenal</h2></div>
-        <p data-en="Click a tool to see the writeups where I use it. Every skill is tied to real work.">Klik op een tool om de writeups te zien waarin ik 'm gebruik. Elke skill is gekoppeld aan echt werk.</p>
+        <p data-en="Click a tool to see the writeups where I use it. I'm backing each skill here with proof over time.">Klik op een tool om de writeups te zien waarin ik 'm gebruik. Gaandeweg vul ik elke skill hier aan met bewijs.</p>
       </div>
       {arsenal.groups.map((grp) => (
         <div class="arsenal-group">
@@ -151,7 +158,9 @@ const gh = 'M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
     </section>
   </div>
 
-  <!-- PROJECTS -->
+  <!-- PROJECTS (verschijnt alleen als er projecten in de CMS staan) -->
+  {projects.projects.length > 0 && (
+  <>
   <div class="wrap">
     <section class="sec" style="padding-top:0" id="projects">
       <div class="sec-head">
@@ -165,8 +174,11 @@ const gh = 'M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
               <span class="nm"><svg viewBox="0 0 16 16"><path d={gh}></path></svg>{p.name}</span>
               <span class="when">{p.when}</span>
             </div>
-            <div class="proj-img" style={`background:${p.bannerGradient}`}><span class="pw">{p.bannerWord}</span></div>
-            <p>{p.blurb}</p>
+            <div class="proj-img" style={p.bannerImage ? undefined : `background:${p.bannerGradient}`}>
+              {p.bannerImage && <img src={p.bannerImage} alt="" loading="lazy" />}
+              {p.bannerWord && <span class="pw">{p.bannerWord}</span>}
+            </div>
+            <p data-en={p.blurb_en}>{p.blurb}</p>
             <div class="pf">
               <span class="lang"><span class="d" style={`background:${p.langColor}`}></span>{p.lang}</span>
               <a class="ghlink" href={p.github} target="_blank" rel="noopener"><svg viewBox="0 0 16 16"><path d={gh}></path></svg>Bekijk op GitHub</a>
@@ -178,6 +190,8 @@ const gh = 'M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
   </div>
 
   <hr class="rule" />
+  </>
+  )}
 
   <!-- FEATURED WRITEUPS -->
   <div class="wrap">
@@ -191,12 +205,12 @@ const gh = 'M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
           <a class="post lift" href={`/writeups/${p.id}`}>
             <div class="pmeta">
               {p.data.category.slice(0, 1).map((c) => <span class="tagc">{c}</span>)}
-              <span class={`diff ${diffClass[p.data.difficulty]}`}>{diffLabel[p.data.difficulty]}</span>
+              <span class={`diff ${diffClass[p.data.difficulty]}`} data-en={diffLabelEn[p.data.difficulty]}>{diffLabel[p.data.difficulty]}</span>
               <span>{p.data.readingTime}</span>
             </div>
-            <h3>{p.data.title}</h3>
-            <p>{p.data.description}</p>
-            <span class="more">Lees writeup</span>
+            <h3 data-en={p.data.title_en}>{p.data.title}</h3>
+            <p data-en={p.data.description_en}>{p.data.description}</p>
+            <span class="more" data-en="Read writeup">Lees writeup</span>
           </a>
         ))}
       </div>
@@ -214,7 +228,7 @@ const gh = 'M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
           {home.about_nl.map((para, i) => <p data-en={home.about_en[i]}>{para}</p>)}
           <div class="contact-row" id="contact">
             <span class="mono-field">{home.contact.email}
-              <button class="copy" data-copy={home.contact.email}>kopieer</button></span>
+              <button class="copy" data-copy={home.contact.email} data-en="copy">kopieer</button></span>
             <a class="btn" href={home.contact.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
             <a class="btn" href={home.contact.github} target="_blank" rel="noopener">GitHub ↗</a>
           </div>

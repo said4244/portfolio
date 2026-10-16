@@ -1,68 +1,89 @@
 {
   "earned": [
     {
+      "title": "eJPT: Junior Penetration Tester",
       "issuer": "eLearnSecurity · INE",
       "badge": "INE",
-      "title": "eJPT: Junior Penetration Tester",
       "date": "Uitgegeven 2 okt 2022",
+      "date_en": "Issued 2 Oct 2022",
       "credential": "Certificaat-nr · 2723971",
+      "credential_en": "Certificate no · 2723971",
       "desc": "Hands-on examen: netwerk- en webenumeratie, exploitatie en pivoting in een realistische assessment-omgeving.",
+      "desc_en": "Hands-on exam: network and web enumeration, exploitation and pivoting in a realistic assessment environment.",
       "verifyUrl": "https://www.elearnsecurity.com/certification/verify/",
       "image": "/media/certs/ejpt.png",
       "cert": "/media/certs/ejpt.pdf",
-      "status": "Behaald"
+      "status": "Behaald",
+      "status_en": "Earned"
     },
     {
+      "title": "CompTIA Network+",
       "issuer": "CompTIA",
       "badge": "C+",
-      "title": "CompTIA Network+",
       "date": "Uitgegeven aug 2022",
+      "date_en": "Issued Aug 2022",
       "credential": "ID · COMP001022077663 · verify-code XE95TMS5JMF4149Q",
+      "credential_en": "ID · COMP001022077663 · verify code XE95TMS5JMF4149Q",
       "desc": "Netwerkfundament: TCP/IP, subnetting, routing/switching, DNS/DHCP en basis netwerkbeveiliging.",
+      "desc_en": "Networking foundation: TCP/IP, subnetting, routing/switching, DNS/DHCP and basic network security.",
       "verifyUrl": "https://verify.comptia.org",
       "image": "/media/certs/network-plus.png",
       "cert": "/media/certs/network-plus.pdf",
-      "status": "Behaald"
+      "status": "Behaald",
+      "status_en": "Earned"
     },
     {
+      "title": "Pro Lab: Dante",
       "issuer": "Hack The Box",
       "badge": "HTB",
-      "title": "Pro Lab: Dante",
       "date": "Uitgegeven 1 dec 2024",
+      "date_en": "Issued 1 Dec 2024",
       "credential": "Credential ID · HTBCERT-6D3E0B41A4",
+      "credential_en": "Credential ID · HTBCERT-6D3E0B41A4",
       "desc": "Multi-host netwerk-pentest: enumeratie, exploitatie, privilege escalation en pivoting tussen subnets.",
+      "desc_en": "Multi-host network pentest: enumeration, exploitation, privilege escalation and pivoting between subnets.",
       "verifyUrl": "https://www.hackthebox.com/achievement/certification",
       "image": "/media/certs/dante.png",
       "cert": "/media/certs/dante.pdf",
-      "status": "Voltooid"
+      "status": "Voltooid",
+      "status_en": "Completed"
     }
   ],
   "pursuing": [
     {
+      "title": "CJCA: Junior Cybersecurity Associate",
       "issuer": "Hack The Box",
       "badge": "HTB",
-      "title": "CJCA: Junior Cybersecurity Associate",
       "meta": "Verwacht nov 2026",
+      "meta_en": "Expected Nov 2026",
       "desc": "Fundament in defensieve en offensieve basisvaardigheden; de opstap naar de CPTS-track.",
+      "desc_en": "Foundation in defensive and offensive basics; the stepping stone to the CPTS track.",
       "badgeLabel": "In uitvoering",
-      "progress": 45
+      "badgeLabel_en": "In progress",
+      "progress": 71
     },
     {
+      "title": "CPTS: Penetration Testing Specialist",
       "issuer": "Hack The Box",
       "badge": "HTB",
-      "title": "CPTS: Penetration Testing Specialist",
       "meta": "De grote volgende stap",
+      "meta_en": "The big next step",
       "desc": "Volledige, hands-on pentest-certificering met een realistische rapportage-opdracht.",
+      "desc_en": "A full, hands-on pentest certification with a realistic reporting assignment.",
       "badgeLabel": "Gepland",
+      "badgeLabel_en": "Planned",
       "progress": 0
     },
     {
+      "title": "OSCP",
       "issuer": "OffSec",
       "badge": "OS",
-      "title": "OSCP",
       "meta": "Het einddoel",
+      "meta_en": "The end goal",
       "desc": "De industriestandaard voor offensive security, 24-uurs examen met volledige exploitatie-keten.",
+      "desc_en": "The industry standard for offensive security — a 24-hour exam with a full exploitation chain.",
       "badgeLabel": "Doel",
+      "badgeLabel_en": "Goal",
       "progress": 0
     }
   ]

@@ -73,7 +73,7 @@ const isWriteups = path.startsWith('/writeups');
       document.addEventListener('click', function (e) {
         var b = e.target.closest('[data-copy]'); if (!b) return; e.preventDefault();
         var t = b.getAttribute('data-copy'), old = b.textContent;
-        function done() { b.textContent = 'gekopieerd ✓'; setTimeout(function () { b.textContent = old; }, 1400); }
+        function done() { b.textContent = (root.getAttribute('lang') === 'en') ? 'copied ✓' : 'gekopieerd ✓'; setTimeout(function () { b.textContent = old; }, 1400); }
         if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(t).then(done).catch(done); } else { done(); }
       });
       try { var th = localStorage.getItem('pf_theme'); if (th) root.setAttribute('data-theme', th); } catch (e) {}

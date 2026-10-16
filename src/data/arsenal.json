@@ -5,23 +5,35 @@
       "items": [
         {
           "label": "Nmap",
-          "tag": "nmap"
+          "tag": ""
         },
         {
           "label": "Metasploit",
-          "tag": "metasploit"
+          "tag": ""
         },
         {
           "label": "Enumeration",
-          "tag": "recon"
+          "tag": ""
         },
         {
           "label": "Privilege Escalation",
-          "tag": "privesc"
+          "tag": ""
         },
         {
           "label": "Pivoting",
-          "tag": "pivoting"
+          "tag": ""
+        },
+        {
+          "label": "C2",
+          "tag": "c2"
+        },
+        {
+          "label": "SQLi",
+          "tag": "sqli"
+        },
+        {
+          "label": "Prompt Injection",
+          "tag": "prompt injection"
         }
       ]
     },
@@ -34,7 +46,7 @@
         },
         {
           "label": "Bash",
-          "tag": "bash"
+          "tag": ""
         },
         {
           "label": "PowerShell",

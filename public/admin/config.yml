@@ -27,8 +27,10 @@ collections:
     summary: "{{title}}  ·  {{date | date('D MMM YYYY')}}"
     sortable_fields: ["date", "title"]
     fields:
-      - { name: title, label: "Titel", widget: string }
-      - { name: description, label: "Korte omschrijving (subtitel)", widget: text }
+      - { name: title, label: "Titel (NL)", widget: string }
+      - { name: title_en, label: "Titel (EN)", widget: string, required: false }
+      - { name: description, label: "Korte omschrijving / subtitel (NL)", widget: text }
+      - { name: description_en, label: "Korte omschrijving / subtitel (EN)", widget: text, required: false }
       - { name: date, label: "Datum", widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, picker_utc: true }
       - name: category
         label: "Categorie (voor de zijbalk-filters)"
@@ -114,13 +116,17 @@ collections:
               - { name: title, label: "Titel", widget: string }
               - { name: issuer, label: "Uitgever", widget: string }
               - { name: badge, label: "Badge-tekst (bv INE)", widget: string }
-              - { name: date, label: "Datum-regel", widget: string }
-              - { name: credential, label: "Credential-ID regel", widget: string }
-              - { name: desc, label: "Omschrijving", widget: text }
+              - { name: date, label: "Datum-regel (NL)", widget: string }
+              - { name: date_en, label: "Datum-regel (EN)", widget: string, required: false }
+              - { name: credential, label: "Credential-ID regel (NL)", widget: string }
+              - { name: credential_en, label: "Credential-ID regel (EN)", widget: string, required: false }
+              - { name: desc, label: "Omschrijving (NL)", widget: text }
+              - { name: desc_en, label: "Omschrijving (EN)", widget: text, required: false }
               - { name: verifyUrl, label: "Verify-URL", widget: string }
               - { name: image, label: "Certificaat-afbeelding", widget: image }
               - { name: cert, label: "Certificaat-PDF", widget: file }
-              - { name: status, label: "Status (Behaald/Voltooid)", widget: string, default: "Behaald" }
+              - { name: status, label: "Status (NL, bv Behaald/Voltooid)", widget: string, default: "Behaald" }
+              - { name: status_en, label: "Status (EN, e.g. Earned/Completed)", widget: string, required: false }
           - name: pursuing
             label: "Bezig & volgende"
             widget: list
@@ -129,9 +135,12 @@ collections:
               - { name: title, label: "Titel", widget: string }
               - { name: issuer, label: "Uitgever", widget: string }
               - { name: badge, label: "Badge-tekst", widget: string }
-              - { name: meta, label: "Sub-tekst", widget: string }
-              - { name: desc, label: "Omschrijving", widget: text }
-              - { name: badgeLabel, label: "Status-label (In uitvoering/Gepland/Doel)", widget: string }
+              - { name: meta, label: "Sub-tekst (NL)", widget: string }
+              - { name: meta_en, label: "Sub-tekst (EN)", widget: string, required: false }
+              - { name: desc, label: "Omschrijving (NL)", widget: text }
+              - { name: desc_en, label: "Omschrijving (EN)", widget: text, required: false }
+              - { name: badgeLabel, label: "Status-label (NL, In uitvoering/Gepland/Doel)", widget: string }
+              - { name: badgeLabel_en, label: "Status-label (EN, In progress/Planned/Goal)", widget: string, required: false }
               - { name: progress, label: "Voortgang % (0 = geen balk)", widget: number, value_type: int, default: 0 }
       - name: projects
         label: "Projecten"
@@ -144,11 +153,13 @@ collections:
             fields:
               - { name: name, label: "Naam", widget: string }
               - { name: when, label: "Label (bv lab-tooling)", widget: string }
-              - { name: blurb, label: "Omschrijving", widget: text }
+              - { name: blurb, label: "Omschrijving (NL)", widget: text }
+              - { name: blurb_en, label: "Omschrijving (EN)", widget: text, required: false }
               - { name: lang, label: "Taal", widget: string }
               - { name: langColor, label: "Taal-kleur (hex)", widget: string, default: "#3f8f3f" }
-              - { name: bannerWord, label: "Banner-woord", widget: string }
-              - { name: bannerGradient, label: "Banner-gradient (CSS)", widget: string }
+              - { name: bannerImage, label: "Banner-afbeelding (optioneel — vervangt de gradient)", widget: image, required: false, media_folder: "/public/media/projects", public_folder: "/media/projects", hint: "Upload een plaatje voor de banner. Laat leeg om in plaats daarvan de gradient te gebruiken." }
+              - { name: bannerWord, label: "Banner-woord (optioneel)", widget: string, required: false, hint: "Tekst over de banner. Laat leeg voor geen tekst." }
+              - { name: bannerGradient, label: "Banner-gradient (CSS, gebruikt als er geen afbeelding is)", widget: string, required: false, default: "linear-gradient(135deg,#1b1e24,#3a2420 68%,#7a2f26)" }
               - { name: github, label: "GitHub-URL", widget: string }
       - name: arsenal
         label: "Arsenal"
