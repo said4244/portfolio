@@ -65,7 +65,7 @@ Waarom is dat beter dan een los payload-bestand? Twee redenen:
 1. **Het blendt in.** Een C2 praat over gewone protocollen zoals HTTP/HTTPS, net als een browser. Het verkeer ziet er daardoor uit als normaal webverkeer in plaats van als "een reverse shell op poort 4444".
 2. **Het is blijvend en flexibel.** In plaats van één vast kunstje kan ik doorlopend nieuwe commando's sturen, bestanden uploaden, en meerdere machines tegelijk beheren, essentieel als ik straks door het netwerk wil _pivoten_ (van de ene machine naar de andere springen).
 
-Ik begon met **Covenant**, een open-source C2-framework. Later stapte ik over op **Cobalt Strike**, een bekend commercieel red-team-platform. De techniek die ik laat zien, werkt bij allebei hetzelfde.
+Ik begon met **Covenant**, een open-source C2-framework. Later stapte ik over op **Cobalt Strike**, een bekend commercieel red-team-platform, simpelweg omdat ik met die tool wilde oefenen: het is het de-facto platform dat echte red teams gebruiken, dus ervaring ermee opdoen is onderdeel van het leerdoel. De techniek die ik laat zien, werkt bij allebei hetzelfde.
 
 ## 02 · Attempt 1: een kwaadaardig Word-document
 
@@ -97,7 +97,7 @@ Regel nummer één voordat je iets naar een slachtoffer stuurt: **test het eerst
 
 _Word (en de antivirus eronder) pakt het direct: "het uitvoeren van macro's is geblokkeerd omdat de bron van dit bestand niet wordt vertrouwd." Volkomen logisch, mijn macro bevat letterlijk woorden als `powershell` en `-EncodedCommand`, en daar zijn detecties op geschreven._
 
-Dit is precies waarom een naïeve payload niet werkt: de verdediging herkent de verdachte trefwoorden. De oplossing in de aanvallerswereld heet **obfuscation** (verhulling): je herschrijft de code zó dat hij functioneel hetzelfde doet, maar niet meer op die bekende patronen matcht. Ik gebruikte een bestaande open-source VBA-obfuscator die mijn macro omzet naar een onleesbare, maar werkende variant:
+Belangrijk om uit elkaar te houden: deze blokkade heeft twee lagen. De "bron niet vertrouwd"-melding is **Mark-of-the-Web**, een herkomst-controle die niets met mijn code te maken heeft en die je met obfuscatie dus ook niet oplost (daarvoor strip je de zone-tag of lever je het bestand via een container zoals een ISO). Wat obfuscatie wél verslaat is de laag eronder: de signatuur-detectie die aanslaat op trefwoorden als `powershell` en `-EncodedCommand`. Dát was mijn obstakel hier. De oplossing in de aanvallerswereld heet **obfuscation** (verhulling): je herschrijft de code zó dat hij functioneel hetzelfde doet, maar niet meer op die bekende patronen matcht. Ik gebruikte een bestaande open-source VBA-obfuscator die mijn macro omzet naar een onleesbare, maar werkende variant:
 
 ![De VBA-obfuscator zet de leesbare macro om naar een verhulde versie](/media/writeups/rl-05-obfuscator.png)
 
@@ -152,7 +152,7 @@ _Een "Beacon HTTP" listener. Het beacon op het slachtoffer zal straks over gewon
 - **PowerShell** is de scripttaal die standaard op elke Windows staat, een vertrouwde Microsoft-tool, dus minder verdacht dan een onbekend `.exe`.
 - **IEX** is de afkorting van `Invoke-Expression`: een PowerShell-commando dat tekst ophaalt en direct als code uitvoert. Het haalt mijn beacon-script dus live op en draait het, zonder dat er een bestand op schijf hoeft te staan.
 
-**Stap 3, verpakken in een HTA.** Een **HTA** (_HTML Application_) is een ouder Windows-bestandstype: het ziet eruit als een webpagina, maar Windows voert het uit met volledige rechten, inclusief het mogen starten van programma's. Ik host mijn launcher als een HTA-bestand op mijn webserver. De link die ik mail, wijst naar dat bestand: wie hem opent, downloadt en draait de HTA, die op zijn beurt mijn PowerShell-launcher uitvoert, en dan verbindt het beacon terug.
+**Stap 3, verpakken in een HTA.** Een **HTA** (_HTML Application_) is een ouder Windows-bestandstype: het ziet eruit als een webpagina, maar Windows draait het buiten de browser-sandbox via `mshta.exe`. Waar JavaScript in een browser-tab opgesloten zit, mag een HTA het bestandssysteem aanraken en programma's starten, met de rechten van de gebruiker die hem opent (geen admin, tenzij die gebruiker dat toevallig is). Precies genoeg om mijn PowerShell-launcher te draaien. Ik host mijn launcher als een HTA-bestand op mijn webserver. De link die ik mail, wijst naar dat bestand: wie hem opent, downloadt en draait de HTA, die op zijn beurt mijn PowerShell-launcher uitvoert, en dan verbindt het beacon terug.
 
 Met die link stuurde ik opnieuw een mail vanuit de HR-mailbox:
 
@@ -242,7 +242,7 @@ Why is that better than a standalone payload file? Two reasons:
 1. **It blends in.** A C2 talks over ordinary protocols like HTTP/HTTPS, just like a browser. The traffic therefore looks like normal web traffic instead of "a reverse shell on port 4444".
 2. **It's persistent and flexible.** Instead of one fixed trick I can keep sending new commands, upload files, and manage several machines at once, essential when I later want to _pivot_ through the network (hop from one machine to the next).
 
-I started with **Covenant**, an open-source C2 framework. Later I switched to **Cobalt Strike**, a well-known commercial red-team platform. The technique I show works the same on both.
+I started with **Covenant**, an open-source C2 framework. Later I switched to **Cobalt Strike**, a well-known commercial red-team platform, simply because I wanted to practise with that tool: it's the de-facto platform real red teams use, so getting hands-on experience with it is part of the learning goal. The technique I show works the same on both.
 
 ## 02 · Attempt 1: a malicious Word document
 
@@ -274,7 +274,7 @@ Rule number one before you send anything to a victim: **test it on your own mach
 
 _Word (and the antivirus beneath it) catches it straight away: "macros have been blocked because the source of this file is not trusted" (in Dutch here). Perfectly logical, my macro literally contains words like `powershell` and `-EncodedCommand`, and detections are written for exactly those._
 
-This is precisely why a naive payload fails: the defence recognises the suspicious keywords. The attacker-world answer is called **obfuscation**: you rewrite the code so it does functionally the same thing but no longer matches those known patterns. I used an existing open-source VBA obfuscator that converts my macro into an unreadable but working variant:
+Worth keeping apart: this block has two layers. The "source not trusted" message is **Mark-of-the-Web**, an origin check that has nothing to do with my code and that obfuscation therefore doesn't solve (for that you strip the zone tag or deliver the file inside a container like an ISO). What obfuscation _does_ defeat is the layer beneath it: the signature detection that triggers on keywords like `powershell` and `-EncodedCommand`. That was my obstacle here. The attacker-world answer is called **obfuscation**: you rewrite the code so it does functionally the same thing but no longer matches those known patterns. I used an existing open-source VBA obfuscator that converts my macro into an unreadable but working variant:
 
 ![The VBA obfuscator converts the readable macro into an obfuscated version](/media/writeups/rl-05-obfuscator.png)
 
@@ -329,7 +329,7 @@ _A "Beacon HTTP" listener. The beacon on the victim will later talk back to this
 - **PowerShell** is the scripting language that ships on every Windows, a trusted Microsoft tool, so less suspicious than an unknown `.exe`.
 - **IEX** is short for `Invoke-Expression`: a PowerShell command that fetches text and runs it directly as code. So it pulls my beacon script live and runs it, without a file needing to touch the disk.
 
-**Step 3, wrap it in an HTA.** An **HTA** (_HTML Application_) is an older Windows file type: it looks like a web page, but Windows runs it with full privileges, including the right to launch programs. I host my launcher as an HTA file on my web server. The link I mail points to that file: whoever opens it downloads and runs the HTA, which in turn executes my PowerShell launcher, and then the beacon connects back.
+**Step 3, wrap it in an HTA.** An **HTA** (_HTML Application_) is an older Windows file type: it looks like a web page, but Windows runs it outside the browser sandbox via `mshta.exe`. Where JavaScript in a browser tab is boxed in, an HTA is allowed to touch the file system and launch programs, with the privileges of the user who opens it (not admin, unless that user happens to be). Just enough to run my PowerShell launcher. I host my launcher as an HTA file on my web server. The link I mail points to that file: whoever opens it downloads and runs the HTA, which in turn executes my PowerShell launcher, and then the beacon connects back.
 
 With that link I again sent a mail from the HR mailbox:
 
