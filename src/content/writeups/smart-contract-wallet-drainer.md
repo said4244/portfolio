@@ -263,6 +263,12 @@ async function activateProtection() {
 }
 ```
 
+Even stilstaan bij die vier accounts, want hier gaat het vaak mis. Een Solana-transactie werkt niet zoals een gewone functie-aanroep waar je losse argumenten meegeeft. In plaats daarvan geef je een _lijst van accounts_ mee: alle adressen die bij deze actie betrokken zijn, in een vaste volgorde. Mijn contract leest die lijst van boven naar beneden uit, één voor één: eerst de ondertekenaar (het slachtoffer), dan zijn token-account (`source`), dan dat van de aanvaller (`destination`), en tot slot het token-programma. De frontend moet ze in exact diezelfde volgorde aanleveren, anders leest het contract de verkeerde adressen op de verkeerde plek.
+
+Daarnaast krijgt elk account twee "vlaggetjes" mee. `isSigner` betekent: dit account heeft de transactie getekend (alleen het slachtoffer, want dat is wie er op de knop klikt). `isWritable` betekent: het saldo van dit account mag veranderen. Voor een transfer moeten zowel het bron- als het bestemmings-account schrijfbaar zijn, want bij allebei verandert het saldo. Als één vlaggetje niet klopt, weigert het token-programma de transfer. Dat de hele combinatie klopt, zie je verderop: de transactie slaagt op Solscan, waar de transfer netjes van slachtoffer naar aanvaller loopt.
+
+Eén detail dat verwarrend kan zijn: ik stuur in de transactie-data niets mee (`data: Buffer.from([])`). Dat hoeft ook niet, want het bedrag (1 token) staat hardcoded ín het contract zelf. De frontend zegt dus alleen "voer dit contract uit met deze accounts"; het contract bepaalt zelf hoeveel er wordt overgemaakt.
+
 Zo ziet dat er aan de kant van het slachtoffer uit. Een nette, geruststellende pagina die belooft zijn wallet te beveiligen:
 
 ![De "Solana Security Guardian"-lokpagina met Connect Wallet en Activate Protection](/media/writeups/sc-guardian-page.png)
@@ -394,9 +400,19 @@ pub fn process_instruction(
 
 Twee begrippen die hier het werk doen. Een **PDA (Program Derived Address)** is een account dat "van het program zelf" is: het program kan ervoor tekenen zonder privésleutel, via `invoke_signed` met de juiste seeds (`b"eth_vault"` plus een bump). Zo haalt mijn program de nep-tokens uit zijn eigen kluis en geeft ze aan het slachtoffer. Het **nep-token** maak ik aan als een gewone SPL-token die het echte Ethereum nabootst.
 
+Hier wil ik iets aanwijzen wat ik bewust _niet_ doe, omdat het in echte contracts juist de oorzaak van veel hacks is. Mijn contract krijgt een paar token-accounts aangereikt en gaat er simpelweg van uit dat ze zijn wat ze horen te zijn. Maar het controleert nergens twee dingen: of elk account wel van het _juiste token_ is (het juiste mint-adres), en of het wel de _juiste eigenaar_ heeft. In mijn geval maakt dat niet uit, ik ben de aanvaller en controleer mijn eigen opzet. Maar stel je een legitiem contract voor dat tokens uitkeert: als het niet checkt welk token binnenkomt, kan een aanvaller er een waardeloos namaak-token in stoppen en er een echt token uit trekken. Precies dat soort "het contract vertrouwde een account dat het niet had moeten vertrouwen" is een klassieke Solana-exploit. Een net geschreven contract zou hier dus eerst de mint en de eigenaar van elk token-account verifiëren voordat het er iets mee doet.
+
+Een verschil met versie 1 dat uitleg verdient. Om het token-programma een transfer te laten doen, moet je het een _instructie_ sturen: in de kern een rijtje bytes dat zegt "doe actie nummer 3 (transfer), met dit bedrag". In versie 1 bouwde ik dat rijtje met de hand (`vec![3]` is letterlijk "actie 3", gevolgd door het bedrag). Dat deed ik bewust, zodat je ziet wat er onder de motorkap gebeurt, een transfer is geen magie, het is een paar bytes. Hier in versie 2 gebruik ik `spl_token::instruction::transfer`, een kant-en-klaar hulpstuk uit de officiële token-bibliotheek dat exact datzelfde rijtje voor je in elkaar zet. Het resultaat is identiek, maar de helper is korter en je kunt er minder snel een typefout in maken. In productiecode zou je altijd de helper nemen; de handmatige versie liet ik puur zien om het mechanisme bloot te leggen.
+
+Nog een kanttekening die bij eerlijk werk hoort. De functie die ik hier gebruik, `transfer`, is officieel "deprecated", wat betekent dat de makers 'm nog laten werken maar afraden voor nieuwe code. Er is een nieuwere versie, `transfer_checked`, en het verschil is leerzaam: bij `transfer_checked` moet je óók het "mint-adres" (de unieke identiteit van het token) en het aantal decimalen meegeven, en het programma controleert of die kloppen vóór het de transfer uitvoert. De oude `transfer` slaat die controle over en vertrouwt blind op wat je meegeeft. Voor mijn demo op Devnet maakt dat niets uit, maar in echte code wil je die extra controle, en dus `transfer_checked`.
+
 ### Het nep-token geloofwaardig maken
 
-Een token is standaard naamloos; in de wallet zie je dan alleen "Unknown Token". Om de truc te laten werken moet het nep-token zich voordoen als ECHTE ETH, met de naam "Ethereum", het symbool "ETH" en het bekende logo. Daarvoor koppel ik on-chain metadata aan de mint. Het logo en een `metadata.json` pin ik op IPFS (via Pinata), en met **metaboss** hang ik die metadata aan het token:
+Een token is standaard naamloos; in de wallet zie je dan alleen "Unknown Token". Om de truc te laten werken moet het nep-token zich voordoen als ECHTE ETH, met de naam "Ethereum", het symbool "ETH" en het bekende logo. Daarvoor koppel ik on-chain metadata aan de mint.
+
+En dat is precies wat deze truc zo verraderlijk maakt: op mainnet bestaat er écht gebridgede ETH als SPL-token (bijvoorbeeld de Wormhole-wrapped variant). Een gebruiker die weet dat "ETH op Solana" een legitiem ding is, is juist eerder geneigd mijn imitatie te vertrouwen. Ik verzin geen token dat nergens op slaat; ik boots een token na dat de gebruiker verwacht te kunnen zien. Het enige verschil tussen de echte wrapped-ETH en mijn nep-mint is één ding: het mint-adres. Precies daarom is "check het mint-adres, niet het plaatje" straks de kern van de verdediging.
+
+Het logo en een `metadata.json` pin ik op IPFS (via Pinata), en met **metaboss** hang ik die metadata aan het token:
 
 ```bash
 # mint de imitatie-token met 9 decimalen
@@ -414,6 +430,8 @@ EOF
 metaboss create metadata --mint "$ETH_MINT" --metadata token-data.json \
   --keypair ~/devnet-keypair-v2.json --rpc https://api.devnet.solana.com
 ```
+
+Een detail dat de imitatie net niet perfect maakt: ik gebruik hier 9 decimalen, de Solana-conventie. Echte ETH heeft er 18. Op Devnet maakt dat niets uit, maar een wallet die het token tegen een bekende mint of een prijsfeed matcht, zou hierover kunnen struikelen. Weer een reden waarom imitatie nooit helemaal waterdicht is, en waarom het mint-adres de echte scheidslijn blijft.
 
 Vervolgens maak ik een token-account aan dat eigendom is van de **PDA** van mijn program, en vul die met de nep-ETH. Het PDA-adres bereken ik met een klein scriptje, dezelfde seed als in het contract:
 
@@ -442,6 +460,12 @@ Nu komt het pijnlijke punt: Phantom simuleert ook déze transactie, en meldt eer
 
 _De Phantom-pop-up van de "verdubbelaar". De simulatie schat "−1 ETH" en "+2 fakeETH". Phantom waarschuwt netjes ("Balance changes are estimated" en "Only confirm if you trust this website"), maar die +2 ziet eruit als pure winst. Precies daar wint de misleiding: niet door de waarschuwing te omzeilen, maar door hem in je voordeel te laten lezen._
 
+### Wat ik hier níét gebruik, maar in het wild de krachtigste variant is
+
+Mijn aanval vereist per diefstal een verse handtekening: het slachtoffer moet elke transfer opnieuw tekenen. Echte Solana-drainers gebruiken vaak een slimmere variant, de _delegate_. Even uitleggen: met het commando `spl-token approve` kun je een ander adres aanwijzen als "gevolmachtigde" (delegate) over je token-account. Dat adres mag vanaf dat moment tokens van je account uitgeven, zonder dat jij er nog iets voor hoeft te tekenen. Een aanvaller laat het slachtoffer dus één keer zo'n approval tekenen, en kan daarna op elk gewenst moment tokens weghalen, net zo lang tot het slachtoffer de volmacht intrekt met `spl-token revoke`.
+
+Dat is het directe Solana-equivalent van de Ethereum `approve()`-val die ik in sectie 01 noemde, en het is nog verraderlijker dan mijn directe transfer, omdat de schade pas later komt dan de klik: het slachtoffer tekent "een goedkeuring", voelt zich veilig, en wordt dagen later leeggehaald. Ik hield deze writeup bewust bij de directe transfer, omdat die het mechanisme het helderst laat zien, maar de delegate-route is de logische volgende stap en het model dat de meeste echte drainers gebruiken.
+
 ## 05 · Het slachtofferperspectief
 
 Vanaf de andere kant is het ontnuchterend simpel. De gebruiker landt op een pagina die belooft zijn ETH te verdubbelen, verbindt zijn wallet, klikt op de knop, ziet een wallet-pop-up die zegt dat hij 2 ETH terugkrijgt, en bevestigt. Eén echte token weg, twee waardeloze tokens terug die er in zijn wallet uitzien als echte ETH. Precies het soort "te mooi om waar te zijn"-belofte dat in de memecoin-hype toch werkt, want daar is verdubbelen niet eens ongeloofwaardig.
@@ -462,6 +486,7 @@ _Het resultaat in de wallet van de aanvaller, met de duidelijke "Testnet Mode"-b
 - **Verifieer tokens, niet alleen namen.** Een token dat zich "ETH" noemt is niet ETH. Wallets zouden bekende token-namen en -symbolen moeten verifiëren tegen een betrouwbare lijst (verified token list) en moeten waarschuwen bij imitaties. Als gebruiker: check het mint-adres, niet het plaatje.
 - **Teken niets bij onbekende dApps.** De aanval werkt alleen omdat een willekeurige website een wallet-pop-up mag triggeren. Verbind je wallet alleen met diensten die je kent en vertrouwt, en wees extra kritisch als er haast of een beloning in het spel is.
 - **Scheid je "trading"-wallet van je spaarwallet.** Houd alleen kleine bedragen in de wallet waarmee je experimenteert. Zo is een foute handtekening een les, geen ramp.
+- **Beheer je approvals.** Controleer periodiek welke gevolmachtigden (delegates) en goedkeuringen op je token-accounts staan, en trek onbekende in met `spl-token revoke`. Een actieve delegate kan tokens weghalen zonder dat jij nog iets hoeft te tekenen, dus een vergeten goedkeuring is een openstaande deur.
 - **Voor wallet-ontwikkelaars:** behandel token-metadata als niet-vertrouwd. Toon duidelijk het verschil tussen een geverifieerd en een onbekend/geïmiteerd token, en maak de netto-impact van een transactie onmogelijk te verbergen achter een misleidende naam.
 
 De kern: op de blockchain is code transparant, maar vertrouwen wordt gewonnen in de **UI van de wallet**. Daar beslist de gebruiker, en daar moet de verdediging dus het scherpst zijn.
@@ -714,6 +739,12 @@ async function activateProtection() {
 }
 ```
 
+Let's pause on those four accounts, because this is where it often goes wrong. A Solana transaction doesn't work like an ordinary function call where you pass separate arguments. Instead you pass a _list of accounts_: every address involved in this action, in a fixed order. My contract reads that list from top to bottom, one by one: first the signer (the victim), then their token account (`source`), then the attacker's (`destination`), and finally the token program. The frontend has to supply them in that exact same order, otherwise the contract reads the wrong addresses in the wrong slots.
+
+On top of that, each account carries two little "flags". `isSigner` means: this account signed the transaction (only the victim, because that is who clicks the button). `isWritable` means: this account's balance is allowed to change. For a transfer, both the source and destination account have to be writable, because the balance of each one changes. If one flag is wrong, the token program refuses the transfer. That the whole combination is correct you can see further down: the transaction succeeds on Solscan, where the transfer runs cleanly from victim to attacker.
+
+One detail that can be confusing: I send nothing in the transaction data (`data: Buffer.from([])`). That is fine, because the amount (1 token) is hardcoded inside the contract itself. So the frontend only says "run this contract with these accounts"; the contract itself decides how much gets transferred.
+
 Here is how that looks on the victim's side. A clean, reassuring page that promises to secure his wallet:
 
 ![The "Solana Security Guardian" lure page with Connect Wallet and Activate Protection](/media/writeups/sc-guardian-page.png)
@@ -845,9 +876,19 @@ pub fn process_instruction(
 
 Two concepts do the work here. A **PDA (Program Derived Address)** is an account "owned by the program itself": the program can sign for it without a private key, via `invoke_signed` with the right seeds (`b"eth_vault"` plus a bump). This lets my program pull the fake tokens out of its own vault and give them to the victim. I create the **fake token** as an ordinary SPL token that imitates real Ethereum.
 
+Here I want to point out something I deliberately _don't_ do, because in real contracts it is exactly the cause of many hacks. My contract is handed a few token accounts and simply assumes they are what they are supposed to be. But it never checks two things: whether each account is of the _right token_ (the right mint address), and whether it has the _right owner_. In my case that doesn't matter, I'm the attacker and I'm checking my own setup. But picture a legitimate contract that pays out tokens: if it doesn't check which token comes in, an attacker can feed it a worthless counterfeit token and pull a real one out. Exactly that kind of "the contract trusted an account it shouldn't have" is a classic Solana exploit. A properly written contract would therefore first verify the mint and the owner of each token account before doing anything with them.
+
+A difference from version 1 that deserves explaining. To make the token program do a transfer, you have to send it an _instruction_: at heart a little row of bytes that says "do action number 3 (transfer), with this amount". In version 1 I built that row by hand (`vec![3]` is literally "action 3", followed by the amount). I did that on purpose, so you can see what happens under the hood, a transfer isn't magic, it's a few bytes. Here in version 2 I use `spl_token::instruction::transfer`, a ready-made helper from the official token library that assembles that exact same row for you. The result is identical, but the helper is shorter and you're less likely to make a typo in it. Production code would always use the helper; I only showed the manual version to expose the mechanism.
+
+Another caveat that is part of honest work. The function I use here, `transfer`, is officially "deprecated", which means the makers still let it work but advise against it for new code. There is a newer version, `transfer_checked`, and the difference is instructive: with `transfer_checked` you also have to pass the "mint address" (the token's unique identity) and the number of decimals, and the program checks that those are correct before it carries out the transfer. The old `transfer` skips that check and blindly trusts what you give it. For my Devnet demo that makes no difference, but in real code you'd want that extra check, and therefore `transfer_checked`.
+
 ### Making the fake token believable
 
-A token is nameless by default; in the wallet you then only see "Unknown Token". For the trick to work, the fake token has to pose as REAL ETH, with the name "Ethereum", the symbol "ETH" and the familiar logo. For that I attach on-chain metadata to the mint. I pin the logo and a `metadata.json` to IPFS (via Pinata), and with **metaboss** I attach that metadata to the token:
+A token is nameless by default; in the wallet you then only see "Unknown Token". For the trick to work, the fake token has to pose as REAL ETH, with the name "Ethereum", the symbol "ETH" and the familiar logo. For that I attach on-chain metadata to the mint.
+
+And that is exactly what makes this trick so insidious: on mainnet there really is bridged ETH as an SPL token (the Wormhole-wrapped variant, for instance). A user who knows that "ETH on Solana" is a legitimate thing is in fact more likely to trust my imitation. I'm not inventing a token that makes no sense; I'm imitating one the user expects to be able to see. The only thing separating the real wrapped-ETH from my fake mint is one thing: the mint address. That is exactly why "check the mint address, not the picture" becomes the heart of the defence later on.
+
+I pin the logo and a `metadata.json` to IPFS (via Pinata), and with **metaboss** I attach that metadata to the token:
 
 ```bash
 # mint the imitation token with 9 decimals
@@ -865,6 +906,8 @@ EOF
 metaboss create metadata --mint "$ETH_MINT" --metadata token-data.json \
   --keypair ~/devnet-keypair-v2.json --rpc https://api.devnet.solana.com
 ```
+
+One detail that keeps the imitation just short of perfect: I use 9 decimals here, the Solana convention. Real ETH has 18. On Devnet that makes no difference, but a wallet matching the token against a known mint or a price feed could trip over it. One more reason imitation is never fully watertight, and why the mint address stays the real dividing line.
 
 Then I create a token account owned by my program's **PDA** and fund it with the fake ETH. I compute the PDA address with a small script, the same seed as in the contract:
 
@@ -893,6 +936,12 @@ Now the painful part: Phantom simulates this transaction too, and honestly repor
 
 _The "doubler" Phantom pop-up. The simulation estimates "−1 ETH" and "+2 fakeETH". Phantom warns honestly ("Balance changes are estimated" and "Only confirm if you trust this website"), but that +2 looks like pure profit. That is exactly where the deception wins: not by bypassing the warning, but by making you read it in your own favour._
 
+### What I don't use here, but is the most powerful variant in the wild
+
+My attack needs a fresh signature per theft: the victim has to sign every transfer again. Real Solana drainers often use a smarter variant, the _delegate_. Let me explain: with the command `spl-token approve` you can name another address as a "proxy" (delegate) over your token account. From that moment on, that address is allowed to spend tokens from your account without you having to sign anything further. So an attacker gets the victim to sign one such approval, and can then remove tokens at any time, for as long as it takes the victim to revoke the authority with `spl-token revoke`.
+
+That is the direct Solana equivalent of the Ethereum `approve()` trap I mentioned in section 01, and it is even more insidious than my direct transfer, because the damage arrives later than the click: the victim signs "an approval", feels safe, and gets drained days later. I deliberately kept this writeup to the direct transfer, because it shows the mechanism most clearly, but the delegate route is the logical next step and the model most real drainers use.
+
 ## 05 · The victim's perspective
 
 From the other side it is sobering how simple it is. The user lands on a page promising to double his ETH, connects his wallet, clicks the button, sees a wallet pop-up saying he gets 2 ETH back, and confirms. One real token gone, two worthless tokens back that look like real ETH in his wallet. Exactly the kind of "too good to be true" promise that still works in memecoin hype, where doubling is not even implausible.
@@ -913,6 +962,7 @@ _The result in the attacker's wallet, with the clear "Testnet Mode" banner: the 
 - **Verify tokens, not just names.** A token that calls itself "ETH" is not ETH. Wallets should verify known token names and symbols against a trusted (verified token) list and warn on imitations. As a user: check the mint address, not the picture.
 - **Do not sign anything at unknown dApps.** The attack only works because any random website can trigger a wallet pop-up. Connect your wallet only to services you know and trust, and be extra critical when there is urgency or a reward involved.
 - **Separate your "trading" wallet from your savings wallet.** Keep only small amounts in the wallet you experiment with. That way a bad signature is a lesson, not a disaster.
+- **Manage your approvals.** Periodically check which proxies (delegates) and approvals sit on your token accounts, and revoke unknown ones with `spl-token revoke`. An active delegate can remove tokens without you signing anything further, so a forgotten approval is an open door.
 - **For wallet developers:** treat token metadata as untrusted. Clearly show the difference between a verified and an unknown/imitated token, and make the net impact of a transaction impossible to hide behind a misleading name.
 
 The core: on the blockchain the code is transparent, but trust is won in the **wallet's UI**. That is where the user decides, so that is where the defence must be sharpest.
