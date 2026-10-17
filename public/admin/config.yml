@@ -5,7 +5,7 @@
 
 backend:
   name: github
-  repo: OffSecSaid/portfolio   # GitHub user/repo that Cloudflare Pages deploys from
+  repo: said4244/portfolio   # GitHub user/repo that Cloudflare Pages deploys from
   branch: main
 
 # Zet lokaal bewerken aan (werkt met de dev-server, geen GitHub nodig):
