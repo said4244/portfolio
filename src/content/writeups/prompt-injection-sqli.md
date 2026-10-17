@@ -26,7 +26,7 @@ draft: false
 
 Dit is de brug tussen mijn twee werelden: AI en offensive security. Een LLM-agent die tools mag aanroepen klinkt handig, tot je beseft dat je daarmee een heel gehoorzame tussenpersoon tussen een aanvaller en je backend zet. Ik bouw de aanval van de grond af op, zodat het aan het eind geen trucje is maar iets logisch.
 
-De repo met beide versies staat op GitHub: [OffSecSaid/llm-agent-prompt-injection-lab](https://github.com/OffSecSaid/llm-agent-prompt-injection-lab).
+De repo met beide versies staat op GitHub: [said4244/llm-agent-prompt-injection-lab](https://github.com/said4244/llm-agent-prompt-injection-lab).
 
 ## 00 · Het scenario: een banking-chatbot
 
@@ -170,7 +170,7 @@ De lessen, bruikbaar buiten dit lab:
 
 Een LLM-agent met tools is een krachtige confused deputy. Prompt injection geeft een aanvaller de controle over wat die agent "denkt" en doet, en vanaf daar is elke zwakke tool een directe weg naar SQL injection, command execution of erger. De oplossing was geen enkele slimme AI-truc, maar saaie, bewezen fundamenten: untrusted input wantrouwen, geparametriseerde queries, least privilege op tools, niet shellen op data, en goede logging. Precies de dingen die we al twintig jaar weten, nu met een taalmodel ertussen.
 
-**Referenties:** WithSecure Labs: [LLM Agent Prompt Injection](https://labs.withsecure.com/publications/llm-agent-prompt-injection) · OWASP Top 10 for LLM Applications (LLM01: Prompt Injection) · OWASP SQL Injection Prevention Cheat Sheet · MITRE ATT&CK T1059 (Command and Scripting Interpreter). Code: [OffSecSaid/llm-agent-prompt-injection-lab](https://github.com/OffSecSaid/llm-agent-prompt-injection-lab).
+**Referenties:** WithSecure Labs: [LLM Agent Prompt Injection](https://labs.withsecure.com/publications/llm-agent-prompt-injection) · OWASP Top 10 for LLM Applications (LLM01: Prompt Injection) · OWASP SQL Injection Prevention Cheat Sheet · MITRE ATT&CK T1059 (Command and Scripting Interpreter). Code: [said4244/llm-agent-prompt-injection-lab](https://github.com/said4244/llm-agent-prompt-injection-lab).
 
 </div>
 
@@ -182,7 +182,7 @@ Een LLM-agent met tools is een krachtige confused deputy. Prompt injection geeft
 
 This is the bridge between my two worlds: AI and offensive security. An LLM agent that can call tools sounds convenient, until you realise you've placed a very obedient middleman between an attacker and your backend. I'll build the attack from the ground up, so by the end it reads as logical, not as a trick.
 
-The repo with both builds is on GitHub: [OffSecSaid/llm-agent-prompt-injection-lab](https://github.com/OffSecSaid/llm-agent-prompt-injection-lab).
+The repo with both builds is on GitHub: [said4244/llm-agent-prompt-injection-lab](https://github.com/said4244/llm-agent-prompt-injection-lab).
 
 ## 00 · The scenario: a banking chatbot
 
@@ -328,6 +328,6 @@ The lessons, useful well beyond this lab:
 
 An LLM agent with tools is a powerful confused deputy. Prompt injection gives an attacker control over what that agent "thinks" and does, and from there every weak tool is a direct path to SQL injection, command execution or worse. The fix wasn't a clever AI trick but boring, proven fundamentals: distrust untrusted input, parameterise queries, least privilege on tools, don't shell out on data, and log properly. Exactly the things we've known for twenty years, now with a language model in the middle.
 
-**References:** WithSecure Labs: [LLM Agent Prompt Injection](https://labs.withsecure.com/publications/llm-agent-prompt-injection) · OWASP Top 10 for LLM Applications (LLM01: Prompt Injection) · OWASP SQL Injection Prevention Cheat Sheet · MITRE ATT&CK T1059 (Command and Scripting Interpreter). Code: [OffSecSaid/llm-agent-prompt-injection-lab](https://github.com/OffSecSaid/llm-agent-prompt-injection-lab).
+**References:** WithSecure Labs: [LLM Agent Prompt Injection](https://labs.withsecure.com/publications/llm-agent-prompt-injection) · OWASP Top 10 for LLM Applications (LLM01: Prompt Injection) · OWASP SQL Injection Prevention Cheat Sheet · MITRE ATT&CK T1059 (Command and Scripting Interpreter). Code: [said4244/llm-agent-prompt-injection-lab](https://github.com/said4244/llm-agent-prompt-injection-lab).
 
 </div>

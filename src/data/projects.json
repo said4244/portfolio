@@ -10,7 +10,7 @@
       "bannerImage": "/media/projects/LLM-injection.png",
       "bannerWord": "llm·inj",
       "bannerGradient": "linear-gradient(135deg,#24181a,#3a2026 60%,#5a2a3a)",
-      "github": "https://github.com/OffSecSaid/llm-agent-prompt-injection-lab",
+      "github": "https://github.com/said4244/llm-agent-prompt-injection-lab",
       "when_en": "research project"
     },
     {
@@ -22,7 +22,7 @@
       "langColor": "#FF5D01",
       "bannerImage": "/media/projects/portfolio-project.png",
       "bannerGradient": "linear-gradient(135deg,#1b1e24,#2a2440 60%,#3a2f5a)",
-      "github": "https://github.com/OffSecSaid/portfolio",
+      "github": "https://github.com/said4244/portfolio",
       "when_en": "live · this site"
     }
   ]
