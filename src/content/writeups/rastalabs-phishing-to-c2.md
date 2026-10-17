@@ -113,7 +113,7 @@ Even checken of ik ook echt commando's kan draaien op de gecompromitteerde machi
 
 ![De keylogger in Covenant vangt getypte tekst op](/media/writeups/rl-07-keylogger.png)
 
-_De keylogger vangt netjes op wat er getypt wordt. Op mijn eigen testmachine, welteverstaan — dit bewijst alleen dat de controle volledig is._
+_De keylogger vangt netjes op wat er getypt wordt. Op mijn eigen testmachine, wel te verstaan — dit bewijst alleen dat de controle volledig is._
 
 ### En toen... klikte niemand
 
@@ -131,7 +131,7 @@ Voordat ik een hoop werk steek in een nieuwe payload, wil ik eerst iets simpeler
 
 Ik test dat met het simpelst denkbare middel: een **webservertje** dat elke bezoeker logt. Ik mail een onschuldig ogende link en kijk of er iemand op klikt.
 
-![De linktest-mail met een kale link naar mijn webserver](/media/writeups/rl-08-link-test.png)
+![De linktestmail met een kale link naar mijn webserver](/media/writeups/rl-08-link-test.png)
 
 _Een kale link naar mijn eigen webserver (`http://10.10.14.5:8000/`), met een beetje tijdsdruk erbij ("Fill in before 13:30!"). Puur om te meten: klikt er iemand?_
 
@@ -179,7 +179,7 @@ De oorzaak: de **firewall** van RastaLabs liet uitgaand verkeer op zo'n ongebrui
 Zoals altijd de belangrijkste sectie — want een aanval begrijpen is pas nuttig als je 'm ook kunt stoppen. Elke stap hierboven heeft een tegenmaatregel:
 
 - **Macro's standaard blokkeren.** Office kan macro's uit bestanden van internet volledig uitschakelen (Microsoft doet dit inmiddels standaard). Mijn hele attempt 1 strandt hierop als het goed is ingesteld. Overweeg macro-uitvoering alleen toe te staan voor digitaal ondertekende, vertrouwde documenten.
-- **Phishing-awareness bij medewerkers.** Het meest pakkende detail van dit verhaal is dat de _mensen_ mijn eerste aanval stopten door simpelweg de bijlage niet te openen. Training werkt. Leer mensen ook link-domeinen te controleren en vreemde `.hta`-downloads te wantrouwen.
+- **Phishing-awareness bij medewerkers.** Het meest pakkende detail van dit verhaal is dat de _mensen_ mijn eerste aanval stopten door simpelweg de bijlage niet te openen. Training werkt. Leer mensen ook linkdomeinen te controleren en vreemde `.hta`-downloads te wantrouwen.
 - **Blokkeer of beperk gevaarlijke bestandstypen.** `.hta`-bestanden hebben zelden een legitiem doel in een moderne omgeving. Blokkeer de uitvoering ervan (bijvoorbeeld via een AppLocker-/WDAC-beleid) en filter ze uit mail.
 - **Egress filtering (uitgaand verkeer beperken).** Mijn reverse shell faalde op poort 4444 en slaagde op 443 — puur omdat de firewall willekeurig uitgaand verkeer op 443 wél toeliet. Een strak egress-beleid dat alleen verkeer naar bekende bestemmingen toestaat, maakt het terugbellen van een C2 veel moeilijker.
 - **Monitor PowerShell en verdachte ouder-kindprocessen.** Een Word- of `mshta.exe`-proces dat plotseling PowerShell start met `IEX`/`-EncodedCommand`, is een klassiek aanvalspatroon. Zet **PowerShell script block logging** aan en alarmeer op dit soort procesketens (bijvoorbeeld met Sysmon + een SIEM).

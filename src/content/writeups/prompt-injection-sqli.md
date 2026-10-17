@@ -22,7 +22,7 @@ draft: false
 
 > **⚠ Lab & autorisatie.** Dit is een bewust kwetsbare oefenapplicatie die ik zelf heb gebouwd voor een onderzoeksproject (Fontys HBO-ICT, AI & Cybersecurity, Groep L). Alle aanvallen hieronder draaien lokaal tegen mijn eigen app. Dezelfde technieken loslaten op systemen zonder uitdrukkelijke toestemming is strafbaar. Ik schrijf dit bewust ook vanuit verdedigingsperspectief: de hardened-versie en de blue-team sectie onderaan zijn net zo belangrijk als de aanval.
 
-> **◆ TL;DR.** Een LLM-agent die tools mag aanroepen en een database mag bevragen is een confused deputy in wording. Via **prompt injection** neem ik de besluitvorming van de agent over, die geeft vervolgens mijn kwaadaardige `userId` door aan een tool, en daar slaat het door naar **SQL injection** (volledige wachtwoord-dump) en zelfs **OS command injection**. Geen enkel van deze problemen is nieuw of "AI-specifiek": het zijn klassieke fouten (untrusted input, string-SQL, shellen op gebruikersinput, te veel rechten). De LLM is alleen een nieuw afleverkanaal.
+> **◆ TL;DR.** Een LLM-agent die tools mag aanroepen en een database mag bevragen is een confused deputy in de dop. Via **prompt injection** neem ik de besluitvorming van de agent over, die geeft vervolgens mijn kwaadaardige `userId` door aan een tool, en daar escaleert het naar **SQL injection** (volledige wachtwoord-dump) en zelfs **OS command injection**. Geen enkel van deze problemen is nieuw of "AI-specifiek": het zijn klassieke fouten (untrusted input, string-SQL, shellen op gebruikersinput, te veel rechten). De LLM is alleen een nieuw afleverkanaal.
 
 Dit is de brug tussen mijn twee werelden: AI en offensive security. Een LLM-agent die tools mag aanroepen klinkt handig, tot je beseft dat je daarmee een heel gehoorzame tussenpersoon tussen een aanvaller en je backend zet. Ik bouw de aanval van de grond af op, zodat het aan het eind geen trucje is maar iets logisch.
 
@@ -132,7 +132,7 @@ Omdat `user_id` nooit gevalideerd wordt, breekt een waarde als `1; <commando>` u
 Dit is het punt dat ik in mijn onderzoek het belangrijkst vond. Strip de "AI" eraf en je houdt een lijstje over dat elke pentester herkent:
 
 - **Untrusted input vertrouwd:** de agent behandelt gebruikerstekst als interne waarheid.
-- **String-gebouwde SQL:** klassieke SQL injection, lesboek-materiaal.
+- **String-gebouwde SQL:** klassieke SQL injection, een schoolboekvoorbeeld.
 - **Shellen op gebruikersinput:** `os.system()` met niet-gevalideerde data.
 - **Te veel rechten / least privilege genegeerd:** de agent mag alles, de tools vertrouwen alles.
 

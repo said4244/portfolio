@@ -3,7 +3,7 @@
     {
       "name": "llm-agent-prompt-injection-lab",
       "when": "onderzoeksproject",
-      "blurb": "Een ReAct LLM-agent  in twee smaken: een bewust kwetsbare build waar prompt injection doorslaat naar SQL injection en command injection (RCE), en een hardened build die de keten breekt. Inclusief exploit-walkthrough en blue-team notities.",
+      "blurb": "Een ReAct LLM-agent in twee smaken: een bewust kwetsbare build waar prompt injection escaleert naar SQL injection en command injection (RCE), en een hardened build die de keten breekt. Inclusief exploit-walkthrough en blue-team notities.",
       "blurb_en": "A ReAct LLM agent in two builds: a deliberately vulnerable one where prompt injection cascades into SQL injection and command injection (RCE), and a hardened build that breaks the chain. Includes an exploit walkthrough and blue-team notes.",
       "lang": "Python",
       "langColor": "#3572A5",
