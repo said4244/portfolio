@@ -1,8 +1,21 @@
 ---
 import '../styles/global.css';
-export interface Props { title: string; description?: string; }
-const { title, description = 'Offensive-security writeups en portfolio van Said Alhazina.' } = Astro.props;
+import home from '../data/home.json';
+export interface Props { title: string; description?: string; type?: 'website' | 'article'; }
+const { title, description = 'Offensive-security writeups en portfolio van Said Alhazina.', type = 'website' } = Astro.props;
 const path = Astro.url.pathname;
+const canonical = new URL(path, Astro.site).href;
+const ogImage = new URL(home.heroImage, Astro.site).href;
+// Tells search engines who this site belongs to and which profiles are the same person.
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: home.name,
+  url: Astro.site!.href,
+  image: ogImage,
+  jobTitle: 'Ethical hacker',
+  sameAs: [home.contact.linkedin, home.contact.github, home.htb.profileUrl],
+};
 const isHome = path === '/';
 const isWriteups = path.startsWith('/writeups');
 ---
@@ -13,6 +26,17 @@ const isWriteups = path.startsWith('/writeups');
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>{title}</title>
   <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  <meta property="og:type" content={type} />
+  <meta property="og:site_name" content={home.name} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:locale" content="nl_NL" />
+  <meta name="twitter:card" content="summary" />
+  {isHome && <script type="application/ld+json" set:html={JSON.stringify(person)} />}
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

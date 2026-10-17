@@ -10,6 +10,7 @@
     "cms": "npx @sveltia/cms-proxy-server"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
     "astro": "^5.14.0"
   }
 }

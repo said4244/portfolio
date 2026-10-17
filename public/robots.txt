@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+
+Sitemap: https://portfolio.offsecsaid.com/sitemap-index.xml

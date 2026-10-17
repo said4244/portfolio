@@ -16,7 +16,7 @@ const diffLabelEn: Record<string, string> = { instap: 'Entry', medium: 'Medium',
 const fmt = d.date.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' });
 const fmtEn = d.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 ---
-<Base title={d.title} description={d.description}>
+<Base title={`${d.title} · Said Alhazina`} description={d.description} type="article">
   <div class="read">
     <div class="art-head">
       <a class="backlink" href="/writeups" data-en="← Back to writeups">← Terug naar writeups</a>
