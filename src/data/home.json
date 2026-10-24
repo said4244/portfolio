@@ -10,12 +10,12 @@
   "ctaContact_nl": "Neem contact op",
   "ctaContact_en": "Get in touch",
   "htb": {
-    "rank": "Skilled",
-    "rankIndex": 3,
-    "grade": "III",
-    "level": 44,
-    "xpCurrent": 496,
-    "xpMax": 1091,
+    "rank": "Professional",
+    "rankIndex": 4,
+    "grade": "I",
+    "level": 46,
+    "xpCurrent": 48,
+    "xpMax": 1163,
     "machines": 21,
     "profileUrl": "https://profile.hackthebox.com/profile/01a09b5a-85dd-7345-ba8c-9a7f28c61166"
   },
