@@ -27,8 +27,6 @@ draft: false
 
 Dit is de brug tussen twee werelden die ik interessant vind: de blockchain-belofte van "trustless, transparante code" en de keiharde realiteit van social engineering. Een smart contract is openbaar en onveranderlijk, maar dat betekent niet dat het eerlijk is. Ik bouw deze aanval van de grond af op, leg elke term uit, en laat elke stap zien, van de eerste regel Rust tot de werkende phishing-pagina. Ik eindig bij de vraag die er echt toe doet: hoe bescherm je hier een gebruiker tegen?
 
-De bijbehorende research-repo (analyse en verdediging, geen kant-en-klare aanvalstool) staat op GitHub: [OffSecSaid/SmartContract-WalletDrainer](https://github.com/OffSecSaid/SmartContract-WalletDrainer).
-
 ## 00 · Context: waarom traders zo snel hun wallet verbinden
 
 In de memecoin-wereld draait alles om snelheid. Een nieuwe coin start goedkoop, en wie er vroeg bij is kan zijn inleg vermenigvuldigen. Dat betekent dat traders de hele dag hun **software-wallet** (zoals Phantom op Solana) verbinden met onbekende sites, launchpads en "tools". Due diligence is zeldzaam, want elke seconde twijfel kan winst kosten. Precies dat gedrag, snel klikken en snel tekenen, is de voedingsbodem voor contract-based draining.
@@ -502,8 +500,6 @@ De kern: op de blockchain is code transparant, maar vertrouwen wordt gewonnen in
 > **◆ TL;DR.** A memecoin trader connects his Phantom wallet to a dApp that promises something harmless. Under the hood, a Solana program runs an **SPL token transfer from victim to attacker** the moment the victim signs. Version 1, a bare transfer, is caught instantly by Phantom: the wallet simulates the transaction and warns "you are sending 1 token away". In version 2 I wrap the same theft as an **"ETH doubler"**: I take 1 real token and hand back 2 fake tokens that pose as ETH. Now Phantom's own simulation shows "−1 ETH, +2 fakeETH", which looks like pure profit. The warning becomes the bait.
 
 This is the bridge between two worlds I find fascinating: the blockchain promise of "trustless, transparent code" and the hard reality of social engineering. A smart contract is public and immutable, but that does not make it honest. I build this attack from the ground up, explain every term, and show every step, from the first line of Rust to the working phishing page. I end at the question that actually matters: how do you protect a user from this?
-
-The accompanying research repo (analysis and defence, not a ready-to-run attack tool) is on GitHub: [OffSecSaid/SmartContract-WalletDrainer](https://github.com/OffSecSaid/SmartContract-WalletDrainer).
 
 ## 00 · Context: why traders connect their wallet so quickly
 
