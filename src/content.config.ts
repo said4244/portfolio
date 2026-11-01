@@ -13,6 +13,7 @@ const writeups = defineCollection({
     date: z.coerce.date(),
     category: z.array(z.string()).default([]),
     tags: z.array(z.string()).default([]),
+    ogImage: z.string().optional(),
     readingTime: z.string().default('10 min'),
     draft: z.boolean().default(false),
     pinned: z.boolean().default(false),

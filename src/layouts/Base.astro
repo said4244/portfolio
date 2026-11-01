@@ -1,11 +1,11 @@
 ---
 import '../styles/global.css';
 import home from '../data/home.json';
-export interface Props { title: string; description?: string; type?: 'website' | 'article'; }
-const { title, description = 'Offensive-security writeups en portfolio van Said Alhazina.', type = 'website' } = Astro.props;
+export interface Props { title: string; description?: string; type?: 'website' | 'article'; image?: string; }
+const { title, description = 'Offensive-security writeups en portfolio van Said Alhazina.', type = 'website', image } = Astro.props;
 const path = Astro.url.pathname;
 const canonical = new URL(path, Astro.site).href;
-const ogImage = new URL(home.heroImage, Astro.site).href;
+const ogImage = new URL(image || home.heroImage, Astro.site).href;
 // Tells search engines who this site belongs to and which profiles are the same person.
 const person = {
   '@context': 'https://schema.org',
@@ -35,7 +35,7 @@ const isWriteups = path.startsWith('/writeups');
   <meta property="og:url" content={canonical} />
   <meta property="og:image" content={ogImage} />
   <meta property="og:locale" content="nl_NL" />
-  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:card" content={image ? "summary_large_image" : "summary"} />
   {isHome && <script type="application/ld+json" set:html={JSON.stringify(person)} />}
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />

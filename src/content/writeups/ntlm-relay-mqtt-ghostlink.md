@@ -15,6 +15,7 @@ tags:
   - responder
   - impacket
   - windows
+ogImage: /media/writeups/nr-og-cover.png
 readingTime: 20 min
 pinned: false
 draft: false
