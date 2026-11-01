@@ -22,9 +22,6 @@ const featured = [...pinned, ...posts.filter((p) => !p.data.pinned)].slice(0, 3)
 // Arsenal counts are computed from the writeups, so they stay accurate.
 const tagCount = (tag: string) => (tag ? posts.filter((p) => p.data.tags.includes(tag)).length : 0);
 
-const diffClass: Record<string, string> = { instap: 'easy', medium: 'med', hard: 'hard', 'pro-lab': 'hard' };
-const diffLabel: Record<string, string> = { instap: 'Instap', medium: 'Medium', hard: 'Hard', 'pro-lab': 'Pro Lab' };
-const diffLabelEn: Record<string, string> = { instap: 'Entry', medium: 'Medium', hard: 'Hard', 'pro-lab': 'Pro Lab' };
 
 const h = home.htb;
 const xpPct = Math.max(0, Math.min(100, (h.xpCurrent / h.xpMax) * 100)).toFixed(1);
@@ -266,7 +263,6 @@ const gh = 'M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
           <a class="post lift" href={`/writeups/${p.id}`}>
             <div class="pmeta">
               {p.data.category.slice(0, 1).map((c) => <span class="tagc">{c}</span>)}
-              <span class={`diff ${diffClass[p.data.difficulty]}`} data-en={diffLabelEn[p.data.difficulty]}>{diffLabel[p.data.difficulty]}</span>
               <span>{p.data.readingTime}</span>
             </div>
             <h3 data-en={p.data.title_en}>{p.data.title}</h3>

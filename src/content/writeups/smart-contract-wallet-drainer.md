@@ -13,7 +13,6 @@ tags:
   - phishing
   - spl-token
   - phantom
-difficulty: medium
 readingTime: 22 min
 pinned: false
 draft: false

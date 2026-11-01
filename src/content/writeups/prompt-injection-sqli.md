@@ -12,7 +12,6 @@ tags:
   - python
   - sqli
   - prompt injection
-difficulty: instap
 readingTime: 13 min
 pinned: false
 draft: false

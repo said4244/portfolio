@@ -15,7 +15,6 @@ tags:
   - responder
   - impacket
   - windows
-difficulty: hard
 readingTime: 20 min
 pinned: false
 draft: false

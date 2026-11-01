@@ -13,7 +13,6 @@ tags:
   - cobalt-strike
   - active-directory
   - powershell
-difficulty: medium
 readingTime: 14 min
 pinned: false
 draft: false

@@ -24,9 +24,6 @@ const cats = [
 const cardTags = (p: (typeof posts)[number]) =>
   [...p.data.category.map(slugify), ...p.data.tags].join(' ');
 
-const diffClass: Record<string, string> = { instap: 'easy', medium: 'med', hard: 'hard', 'pro-lab': 'hard' };
-const diffLabel: Record<string, string> = { instap: 'Instap', medium: 'Medium', hard: 'Hard', 'pro-lab': 'Pro Lab' };
-const diffLabelEn: Record<string, string> = { instap: 'Entry', medium: 'Medium', hard: 'Hard', 'pro-lab': 'Pro Lab' };
 const fmtD = (d: Date) => d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' });
 const fmtDEn = (d: Date) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 ---
@@ -59,7 +56,6 @@ const fmtDEn = (d: Date) => d.toLocaleDateString('en-GB', { day: 'numeric', mont
             <a class="post" href={`/writeups/${p.id}`} data-tags={cardTags(p)}>
               <div class="pmeta">
                 {p.data.category.slice(0, 2).map((c) => <span class="tagc">{c}</span>)}
-                <span class={`diff ${diffClass[p.data.difficulty]}`} data-en={diffLabelEn[p.data.difficulty]}>{diffLabel[p.data.difficulty]}</span>
                 <span>{p.data.readingTime}</span>
                 <span data-en={`· ${fmtDEn(p.data.date)}`}>· {fmtD(p.data.date)}</span>
               </div>
