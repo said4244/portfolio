@@ -1,5 +1,5 @@
 ---
-title: 'NTLM relay in de praktijk: via een messaging-service inloggen op een afgeschermde site'
+title: 'NTLM relay in de praktijk'
 title_en: 'NTLM relay in practice: logging into a locked-down site through a messaging service'
 description: Een volledig uitgewerkt NTLM-relay-verhaal. Hoe een onschuldige healthcheck in een messaging-service een service-account zover krijgt dat het zich bij míj aanmeldt, waarom die hash niet te kraken is, en hoe ik die aanmelding doorsluis om op een afgeschermde webapp te komen, zonder het wachtwoord ooit te zien.
 description_en: A fully worked NTLM relay story. How an innocent health check in a messaging service makes a service account authenticate to me, why that hash can't be cracked, and how I relay that authentication to land inside a locked-down web app, without ever seeing the password.
