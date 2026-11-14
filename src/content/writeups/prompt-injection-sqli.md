@@ -11,7 +11,7 @@ tags:
   - sql
   - python
   - sqli
-  - prompt injection
+  - prompt-injection
 readingTime: 13 min
 pinned: false
 draft: false
