@@ -5,7 +5,7 @@
       "items": [
         {
           "label": "Nmap",
-          "tag": ""
+          "tag": "nmap"
         },
         {
           "label": "Metasploit",
@@ -34,6 +34,38 @@
         {
           "label": "Prompt Injection",
           "tag": "prompt injection"
+        },
+        {
+          "label": "Active Directory",
+          "tag": "active-directory"
+        },
+        {
+          "label": "RCE",
+          "tag": "rce"
+        },
+        {
+          "label": "CVE Analysis",
+          "tag": "cve"
+        },
+        {
+          "label": "Phishing",
+          "tag": "phishing"
+        },
+        {
+          "label": "Red Team",
+          "tag": "red-team"
+        },
+        {
+          "label": "Web3",
+          "tag": "web3"
+        },
+        {
+          "label": "Code Review",
+          "tag": "code-review"
+        },
+        {
+          "label": "Impacket",
+          "tag": "impacket"
         }
       ]
     },
